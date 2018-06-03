@@ -1,0 +1,110 @@
+<template>
+<div class="header">
+  <img :src="require('./image/logo-content.png')" class="logo">
+  <div class="login">
+    <el-menu  class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="rgb(0,0,0)" text-color="#fff" active-text-color="rgb(0,0,0)" :router= "true">
+      <el-submenu index="1">
+         <template slot="title" class="admin">
+           <i class="iconfont icon-LC_icon_user_line_2"></i>{{account}}
+        </template>
+          <el-menu-item index="1-1" route="/beekeeper/info"><span slot="title">个人资料</span></el-menu-item>
+          <el-menu-item index="1-2" route="/beekeeper/changepwd"><span slot="title">修改密码</span></el-menu-item>
+          <el-menu-item index="1-3" @click="logout"><span slot="title">注销</span></el-menu-item>
+      </el-submenu>
+    </el-menu>
+    <!-- <span class="admin">
+      <i class="iconfont icon-LC_icon_user_line_2"></i>{{account}}
+    </span> -->
+    <!-- <span class="logout" @click="logout">
+      <i class="iconfont icon-zhuxiao" ></i>注销
+    </span> -->
+  </div>
+</div>
+</template>
+<script>
+import { HIVE_API_TOKEN, HIVE_USER_NAME } from '../../common/localStorageKey';
+import LocalStore from '../../common/localStore';
+export default {
+	name: '',
+	data: () => ({
+		collapse: false,
+		account: '111',
+	}),
+	methods: {
+		changeCollapse() {
+			this.collapse = !this.collapse;
+			this.$emit('change-collapse', this.collapse);
+		},
+		logout() {
+			LocalStore.setItem(HIVE_API_TOKEN, '');
+			LocalStore.setItem(HIVE_USER_NAME, '');
+			setTimeout(() => {
+				this.$emit('logout');
+			}, 200);
+		},
+		handleSelect(key, keyPath) {
+			console.log(key, keyPath);
+		},
+	},
+	mounted() {
+		//do something after mounting vue instance
+		let username = LocalStore.getItem(HIVE_USER_NAME);
+		this.account = username;
+	},
+};
+</script>
+<style  scoped>
+.header {
+	width: 100%;
+	height: 100%;
+	background-color: rgb(0,0,0);
+}
+
+.logo {
+	height: 100%;
+	position: relative;
+	margin-left: 0;
+	float: left;
+}
+
+.collapse-btn {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 60px;
+	height: 60px;
+	line-height: 60px;
+	color: white;
+	cursor: pointer;
+}
+
+.collapse-btn:hover {
+	color: #aaa;
+}
+
+.collapse-btn i {
+	font-size: 25px;
+}
+
+.login {
+	position: absolute;
+	width: 200px;
+	height: 60px;
+	line-height: 60px;
+	right: 0;
+	color: white;
+}
+.admin {
+	font-weight: bold;
+}
+
+.admin:hover,
+.logout:hover {
+	color: #aaa;
+	cursor: pointer;
+}
+.logout {
+	margin-left: 20px;
+	font-weight: bold;
+}
+</style>

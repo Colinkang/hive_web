@@ -1,0 +1,1 @@
+export const HIVE_HOST = "https://api.h1infotech.com.cn";

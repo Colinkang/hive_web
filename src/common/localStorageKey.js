@@ -1,0 +1,2 @@
+export const HIVE_API_TOKEN = "HIVE_API_TOKEN";
+export const HIVE_USER_NAME = "HIVE_USER_NAME";
