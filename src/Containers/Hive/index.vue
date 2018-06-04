@@ -512,13 +512,11 @@ table tr th {
 .overview-chart-left {
   width: 40%;
   height: 100%;
-  border: 1px solid blue;
 }
 
 .overview-chart-right {
   width: 60%;
   height: 100%;
-  border: 1px solid white;
 }
 
 .overview-row {
