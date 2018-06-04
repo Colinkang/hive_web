@@ -1,10 +1,10 @@
 <template>
-    <div id="myChart" :style="{width: '350px', height: '300px'}"></div>
+    <div id="myChart" :style="{width: '100%', height: '100%'}"></div>
 </template>
 <script>
 import echarts from 'echarts'
 export default {
-    
+
 	name: 'mychart',
 	data() {
 		return {

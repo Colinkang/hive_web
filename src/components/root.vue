@@ -29,6 +29,10 @@ import NNav from '../components/nav/index';
 import FFooter from '../components/footer/index';
 import LoginPage from './LoginPage/index.vue';
 import {
+  IS_LOGIN
+} from '../common/localStorageKey';
+import LocalStore from '../common/localStore';
+import {
   post
 } from '../common/post';
 export default {
@@ -65,14 +69,15 @@ export default {
     //     this.isLogin=true
     //   }
     // })
-    this.isLogin=true
+    let isLogin = LocalStore.getItem(IS_LOGIN)
+    this.isLogin=isLogin
   }
 }
 </script>
 <style >
 .hello {
   width: 100%;
-  min-height: 100%;
+  height: 100%;
 }
 
 .el-header {
@@ -91,7 +96,8 @@ export default {
 }
 
 .el-menu {
-  border-right: 1px solid #404040;
+  border: 1px solid #404040;
+  background: #3f3b3a !important
 }
 .login-page{
   position: fixed;
@@ -115,5 +121,17 @@ export default {
   text-indent: 10px;
   margin-bottom: 10px;
   padding-bottom: 5px;
+}
+.el-main{
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border:5px solid rgb(255, 167, 39)
+}
+.el-container{
+  height: 100%;
+}
+.el-menu-item{
+  background: #3f3b3a !important
 }
 </style>

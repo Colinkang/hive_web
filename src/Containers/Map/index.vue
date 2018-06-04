@@ -18,7 +18,7 @@
                   <el-row>
                    <el-col :span="12">蜂箱定位</el-col>
                    <el-col :span="12">
-                      <el-input v-model="boxPosition"></el-input> 
+                      <el-input v-model="boxPosition"></el-input>
                    </el-col>
                  </el-row>
 
@@ -75,7 +75,7 @@ export default {
 		let result = get('/getAllBeeBoxSensorData', null);
 		result.then(function(res) {
 			if (res.data.responseCode) {
-                
+
 			}
 		});
 	},
@@ -99,7 +99,6 @@ export default {
 }
 .global {
 	background-color: rgb(26, 26, 26);
-	border: 5px solid rgb(255, 167, 39);
 	width: 100%;
 	height: 900px;
 	display: flex;

@@ -1,7 +1,7 @@
 <template>
 <div class="header">
   <img :src="require('./image/logo-content.png')" class="logo">
-  <div class="login">
+  <!-- <div class="login">
     <el-menu  class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="rgb(0,0,0)" text-color="#fff" active-text-color="rgb(0,0,0)" :router= "true">
       <el-submenu index="1">
          <template slot="title" class="admin">
@@ -12,17 +12,26 @@
           <el-menu-item index="1-3" @click="logout"><span slot="title">注销</span></el-menu-item>
       </el-submenu>
     </el-menu>
-    <!-- <span class="admin">
-      <i class="iconfont icon-LC_icon_user_line_2"></i>{{account}}
-    </span> -->
-    <!-- <span class="logout" @click="logout">
-      <i class="iconfont icon-zhuxiao" ></i>注销
-    </span> -->
+
+  </div> -->
+  <div class="user-control">
+    <span>
+
+       <router-link to="/beekeeper/info"><i class="iconfont icon-user"></i>{{account}}</router-link>
+    </span>
+    <span>
+        <router-link to="/beekeeper/changepwd">修改</router-link>
+    </span>
+    <span @click="logout">
+      退出
+
+    </span>
+
   </div>
 </div>
 </template>
 <script>
-import { HIVE_API_TOKEN, HIVE_USER_NAME } from '../../common/localStorageKey';
+import { HIVE_API_TOKEN, HIVE_USER_NAME ,IS_LOGIN} from '../../common/localStorageKey';
 import LocalStore from '../../common/localStore';
 export default {
 	name: '',
@@ -37,7 +46,8 @@ export default {
 		},
 		logout() {
 			LocalStore.setItem(HIVE_API_TOKEN, '');
-			LocalStore.setItem(HIVE_USER_NAME, '');
+		//	LocalStore.setItem(HIVE_USER_NAME, '');
+      LocalStore.setItem(IS_LOGIN, '');
 			setTimeout(() => {
 				this.$emit('logout');
 			}, 200);
@@ -58,6 +68,13 @@ export default {
 	width: 100%;
 	height: 100%;
 	background-color: rgb(0,0,0);
+}
+.el-submenu__title,.is-opened{
+    color:white !important;
+}
+
+.el-menu-demo{
+
 }
 
 .logo {
@@ -85,26 +102,24 @@ export default {
 .collapse-btn i {
 	font-size: 25px;
 }
-
-.login {
-	position: absolute;
-	width: 200px;
-	height: 60px;
-	line-height: 60px;
-	right: 0;
-	color: white;
+.user-control{
+  position: absolute;
+  color: white;
+  height: 60px;
+  line-height: 60px;
+  right: 30px;
+  font-size: 14px;
 }
-.admin {
-	font-weight: bold;
+.user-control span{
+  margin-right: 20px;
 }
-
-.admin:hover,
-.logout:hover {
-	color: #aaa;
-	cursor: pointer;
+.user-control span a{
+  color: white;
+  font-size: 14px;
+  text-decoration: none;
 }
-.logout {
-	margin-left: 20px;
-	font-weight: bold;
+.user-control span a:hover,.user-control span:hover{
+  color:#f8b62c;
+  cursor: pointer;
 }
 </style>

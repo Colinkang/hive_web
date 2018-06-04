@@ -10,6 +10,11 @@ export default {
   name: 'app',
   components:{
     Root
+  },
+  mounted(){
+    this.$router.push({
+      path:'/hive/map'
+    })
   }
 }
 </script>
@@ -19,16 +24,23 @@ html,body{
   min-width: 1280px;
   margin: 0;
   padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+input{
+  padding: 0;
+  margin:0;
 }
 .el-main{
   margin: 0;
   padding: 0;
+  background-color: #3f3b3a
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  height: 100%;
 }
 </style>
