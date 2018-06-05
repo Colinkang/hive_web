@@ -101,9 +101,9 @@
           <echartspie ref="hive"></echartspie>
         </div>
       </div>
-      <!-- <div class="id-select">
-
-      </div> -->
+      <div class="id-select">
+        <id-select @idChange="idChange"></id-select>
+      </div>
     </div>
   </div>
   <!-- <div class="hive-left">
@@ -202,11 +202,13 @@ import echartspie from './echarts.vue';
 import fold from './fold.vue';
 import moment from 'moment';
 import ChangebleInput from '../../baseCom/ChangebleInput'
+import IdSelect from '../../baseCom/IdSelect'
 export default {
   components: {
     echartspie,
     fold,
-    ChangebleInput
+    ChangebleInput,
+    IdSelect
   },
   data() {
     return {
@@ -242,7 +244,6 @@ export default {
   methods: {
     idChange(id) {
       console.log(id)
-
     },
     dateChange(e) { //时间选择
       console.log(e)
@@ -498,14 +499,13 @@ table tr th {
 }
 
 .overview-chart {
-  width: 100%;
+  width: 65%;
   height: 100%;
   display: flex;
 }
 
 .id-select {
-  border: 1px solid green;
-  width: 40%;
+  width: 34%;
   height: 100%;
 }
 
@@ -526,7 +526,7 @@ table tr th {
 }
 
 .overview-row-left {
-  width: 60%;
+  width: 65%;
   text-align: left;
   text-indent: 20px;
 }
@@ -534,6 +534,6 @@ table tr th {
 .overview-row-right {
   text-align: left;
   text-indent: 20px;
-  width: 40%;
+  width: 35%;
 }
 </style>

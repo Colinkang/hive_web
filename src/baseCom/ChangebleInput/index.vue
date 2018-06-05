@@ -16,7 +16,10 @@ export default {
   name: "",
   data: () => ({
     showText:true,
-    nextValue:''
+    nextValue:'',
+    list:[
+      111,222,333,4444,555,6666,777
+    ]
   }),
   methods:{
     toggle(){
