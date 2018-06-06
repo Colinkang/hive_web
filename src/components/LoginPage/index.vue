@@ -86,6 +86,9 @@ export default {
               LocalStore.setItem(HIVE_USER_PASSWORD, this.password);
             }
             LocalStore.setItem(IS_LOGIN, true);
+            this.$router.push({
+              path:'/hive/map'
+            })
             setTimeout(() => {
               this.$emit('login-success');
             }, 1000);
@@ -102,7 +105,7 @@ export default {
     //do something after mounting vue instance
     this.account = LocalStore.getItem(HIVE_USER_NAME);
     this.password = LocalStore.getItem(HIVE_USER_PASSWORD)
-    this.checked =JSON.parse(LocalStore.getItem(HIVE_REMENBER_USERNAME)) 
+    this.checked =JSON.parse(LocalStore.getItem(HIVE_REMENBER_USERNAME))
 
   }
 };

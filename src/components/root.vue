@@ -3,7 +3,7 @@
   <div class="hello" v-if="isLogin">
     <el-container>
       <el-header>
-        <h-header  @logout="logout"></h-header>
+        <h-header @logout="logout"></h-header>
       </el-header>
       <el-container>
         <el-aside>
@@ -47,15 +47,15 @@ export default {
   data() {
     return {
       collapse: false,
-      isLogin:false
+      isLogin: false
     }
   },
   methods: {
-    loginSuccess(){
-      this.isLogin=true;
+    loginSuccess() {
+      this.isLogin = true;
     },
-    logout(){
-      this.isLogin=false;
+    logout() {
+      this.isLogin = false;
     }
   },
   mounted() {
@@ -70,7 +70,12 @@ export default {
     //   }
     // })
     let isLogin = LocalStore.getItem(IS_LOGIN)
-    this.isLogin=isLogin
+    this.isLogin = isLogin;
+    if (!isLogin) {
+      this.$router.push({
+        path: '/'
+      })
+    }
   }
 }
 </script>
@@ -99,7 +104,8 @@ export default {
   border: 1px solid #404040;
   background: #3f3b3a !important
 }
-.login-page{
+
+.login-page {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -107,12 +113,13 @@ export default {
   background: white;
   color: black;
 }
-.img-upload-row .el-upload__input{
+
+.img-upload-row .el-upload__input {
   opacity: 0 !important;
   position: absolute;
 }
 
-.mianbao{
+.mianbao {
   position: relative;
   text-align: left;
   font-size: 20px;
@@ -122,16 +129,19 @@ export default {
   margin-bottom: 10px;
   padding-bottom: 5px;
 }
-.el-main{
+
+.el-main {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border:5px solid rgb(255, 167, 39)
+  border: 5px solid rgb(255, 167, 39)
 }
-.el-container{
+
+.el-container {
   height: 100%;
 }
-.el-menu-item{
+
+.el-menu-item {
   background: #3f3b3a !important
 }
 </style>

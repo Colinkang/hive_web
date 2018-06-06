@@ -381,7 +381,7 @@ export default {
 
 .section-left {
 	position: relative;
-	width: 42%;
+	width: 35%;
 	height: 100%;
 	overflow: scroll;
 	padding-bottom: 20px;
@@ -389,7 +389,7 @@ export default {
 }
 
 .section-right {
-	width: 55%;
+	width: 64%;
 	height: 100%;
 	padding-left: 10px;
 	padding-right: 10px;

@@ -355,4 +355,9 @@ export default {
 .data-id-select-box{
   margin-top: 20px;
 }
+.demo{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 </style>

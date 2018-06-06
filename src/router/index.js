@@ -14,7 +14,7 @@ export default new Router({
       path: '/',
       name: 'content',
       component: content,
-      redirect: '/hive/list',
+      redirect: '/hive/map',
       children: [
 
         {

@@ -51,6 +51,9 @@ export default {
 			setTimeout(() => {
 				this.$emit('logout');
 			}, 200);
+      this.$router.push({
+        path:'/'
+      })
 		},
 		handleSelect(key, keyPath) {
 			console.log(key, keyPath);
