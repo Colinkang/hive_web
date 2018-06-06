@@ -55,7 +55,7 @@ export default {
   border-radius: 15px;
   height: 34px;
   display: inline-block;
-  margin-left: 40px;
+  margin-left: 10px;
   /* 标准的语法 */
 }
 
