@@ -11,7 +11,7 @@
         <th>状态</th>
         <th>电量</th>
       </tr>
-      <tr v-for="(item) in hiveList" :key='item.boxId'>
+      <tr v-for="(item) in hiveList" :key='item.boxId' @click="slectThisRow(item.boxId)">
         <td>{{item.boxId?item.boxId:'-'}}</td>
         <td>{{item.temperature}}</td>
         <td>{{item.humidity}}</td>
@@ -226,8 +226,7 @@ export default {
 			manufacturer: '',
 			productionDate: '',
 			status: '',
-
-			id: 'dwefwe',
+			id: '',
 			date: '',
 		};
 	},
@@ -236,14 +235,15 @@ export default {
 	},
 
 	methods: {
+    slectThisRow(id){
+    //  this.idChange(id)
+    },
 		// 返回单个box的信息
 		idChange(boxId) {
 			// console.log(id)
 			let _this = this;
-			console.log(1111, boxId);
 			let result = post('/getBeeBoxSensorDate', { beeBoxId: boxId });
 			result.then(res => {
-				console.log(res);
 				let data = res.data.data;
 				if (res.data.responseCode === '000035') {
 				} else if (res.data.responseCode === '000000') {
@@ -308,7 +308,6 @@ export default {
 				if (res.data.responseCode) {
 					let data = res.data.data.latestSensorData;
 					let stat = res.data.data;
-					console.log(11111, res.data.data);
 					_this.abnormalBeeBoxNum = stat.abnormalBeeBoxNum;
 					_this.noProtectionNum = stat.noProtectionNum;
 					_this.normalBeeBoxNum = stat.normalBeeBoxNum;
@@ -339,24 +338,10 @@ export default {
 							obj.battery = obj.battery || '-';
 						}
 					}
-					//let data_length = data.length;
-					// if (data_length < 100) {
-					//   for (let i = data_length; i < 100; i++) {
-					//     data.push({
-					//       boxId: null,
-					//       temperature: null,
-					//       humidity: null,
-					//       gravity: null,
-					//       airPressure: null,
-					//       status: null,
-					//       battery: null,
-					//     });
-					//   }
-					// }
-					//  console.log(data);
 					_this.hiveList = data;
-					console.log(1212121212, data);
-					// console.log(_this.hiveList);
+					if(data.length>0){
+
+          }
 				}
 			});
 		},
@@ -386,47 +371,6 @@ export default {
 </script>
 
 <style scoped>
-/* .hive-total {
-
-}
-
-.hive-left {
-  width: 44%;
-  height: 800px;
-
-}
-
-.el-table {
-  height: 800px;
-}
-
-.hive-right {
-  width: 56%;
-  height: 800px;
-}
-
-.hive-info {
-  width: auto;
-  height: 100px;
-  border: 1px solid rgb(118, 102, 78);
-}
-
-.hive-foldline {
-  height: 400px;
-}
-
-.hive-overview-pie {
-  height: 400px;
-  border: 1px solid rebeccapurple;
-}
-
-.hive-overview {
-  height: 100px;
-  border: 1px solid rgb(118, 102, 78);
-} */
-
-/* 我的样式 */
-
 .box {
 	position: relative;
 	width: 100%;
@@ -541,12 +485,13 @@ table tr th {
 }
 
 .overview-chart-left {
-	width: 40%;
+	width: 45%;
 	height: 100%;
+  font-size: 14px;
 }
 
 .overview-chart-right {
-	width: 60%;
+	width: 55%;
 	height: 100%;
 }
 

@@ -16,7 +16,7 @@ export default {
 .my-content{
   width: 100%;
   height: 100%;
-  padding: 10px;
+  padding: 5px;
   overflow: scroll;
   background-color:#3f3b3a
 }
