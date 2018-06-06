@@ -30,7 +30,7 @@ export default {
     selectThis(id){
       if(this.selectId!==id){
         this.selectId=id;
-        this.$emit('idChange',id)
+        this.$emit('idSelectSearch',id)
       }
 
     },
