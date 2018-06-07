@@ -3,7 +3,7 @@
   <div class="section-left">
     <table border="0">
       <tr>
-        <th>封箱ID</th>
+        <th>蜂箱ID</th>
         <th>温度</th>
         <th>湿度</th>
         <th>重量</th>
@@ -157,7 +157,7 @@ export default {
 			protectionNum: '',
 			totalBeeBoxNum: '',
 			date: '',
-			boxId: '',
+			boxId: '2121221',
 			lat: '',
 			lng: '',
 			batchNo: '',
@@ -175,17 +175,14 @@ export default {
 		slectThisRow(boxId) {
 			this.boxId = boxId;
 			this.info_search(boxId);
-			
 		},
 		// 返回单个box的信息
 		idChange(boxId) {
-			// console.log(id)
 			let _this = this;
 			let result = post('/getBeeBoxSensorDate', { beeBoxId: boxId });
 			result.then(res => {
 				let data = res.data.data;
-				if (res.data.responseCode === '000035') {
-				} else if (res.data.responseCode === '000000') {
+				if (res.data.responseCode === '000000') {
 					_this.batchNo = data.batchNo;
 					_this.manufacturer = data.manufacturer;
 					_this.productionDate = date.productionDate;
@@ -196,7 +193,7 @@ export default {
 		// 日期搜索时，获取相关数据，关闭定时器，必须先选择table中某一行
 		dateChange(date) {
 			//时间选择
-			console.log(1111, date[0], date[1],this.boxId);
+			console.log(1111, date[0], date[1], this.boxId);
 			let _this = this;
 			let beginDate = new Date(date[0]).getTime();
 			let endDate = new Date(date[1]).getTime();
@@ -243,10 +240,11 @@ export default {
 			let _this = this;
 			let result = get('/getAllBeeBoxSensorData', null);
 			result.then(function(res) {
-				console.log(123, res);
+				 console.log(123, res);
 				if (res.data.responseCode === '000000') {
 					let data = res.data.data.latestSensorData;
 					let stat = res.data.data;
+					// 总览 饼图
 					_this.abnormalBeeBoxNum = stat.abnormalBeeBoxNum;
 					_this.noProtectionNum = stat.noProtectionNum;
 					_this.normalBeeBoxNum = stat.normalBeeBoxNum;
@@ -263,6 +261,7 @@ export default {
 					};
 					// 画扇形图
 					_this.$refs.hive.drawLine(obj);
+					
 					// 将值赋值给列表
 					for (let obj of data) {
 						if (obj.status === 0) obj.status = '正在运行';
@@ -272,6 +271,7 @@ export default {
 					_this.hiveList = data;
 					if (data.length > 0) {
 						_this.boxId = data[0].boxId;
+						console.log(3456, _this.boxId);
 						_this.info_search(_this.boxId);
 					}
 				}
