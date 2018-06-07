@@ -1,6 +1,6 @@
 <template>
   <div class="my-box">
-    <div class="" :id="lisenValueChange">
+    <div class="my-box" :id="lisenValueChange">
       <input type="" name="" v-model="nextValue" @blur="inputChange" v-on:keyup.enter="inputChange">
     </div>
   </div>
@@ -17,7 +17,7 @@ export default {
   data: () => ({
     showText:true,
     nextValue:'',
-  
+
   }),
   computed:{
     lisenValueChange(){
