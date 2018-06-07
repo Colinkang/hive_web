@@ -1,6 +1,6 @@
 <template>
-  <div class="box">
-    <div class="box">
+  <div class="my-box">
+    <div class="" :id="lisenValueChange">
       <input type="" name="" v-model="nextValue" @blur="inputChange" v-on:keyup.enter="inputChange">
     </div>
   </div>
@@ -19,6 +19,11 @@ export default {
     nextValue:'',
   
   }),
+  computed:{
+    lisenValueChange(){
+      this.nextValue =this.value
+    }
+  },
   methods:{
     toggle(){
       this.showText=false
@@ -33,7 +38,7 @@ export default {
 }
 </script>
 <style lang="" scoped>
-.box{
+.my-box{
   display: inline;
   width: 40px;
 }

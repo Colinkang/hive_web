@@ -12,13 +12,6 @@ Vue.use(BaiduMap, {
   ak: 'r1wcfWyESMqqR4O2xIiR6jeK5i8HNisc'
 });
 
-// import VueSocketio from 'vue-socket.io-extended';
-// import io from 'socket.io-client';
-
-// Vue.use(VueSocketio, io('ws://47.100.201.36:8080'));
-
-// import VueNativeSock from 'vue-native-websocket';
-// Vue.use(VueNativeSock, 'ws://47.100.201.36:8080/sensorDataWebsocket/Chris755/1');
 
 Vue.config.productionTip = false
 

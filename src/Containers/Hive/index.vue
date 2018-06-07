@@ -13,12 +13,12 @@
       </tr>
       <tr v-for="(item) in hiveList" :key='item.boxId' @click="slectThisRow(item.boxId)">
         <td>{{item.boxId?item.boxId:'-'}}</td>
-        <td>{{item.temperature}}</td>
-        <td>{{item.humidity}}</td>
-        <td>{{item.gravity}}</td>
-        <td>{{item.airPressure}}</td>
-        <td>{{item.status}}</td>
-        <td>{{item.battery}}</td>
+        <td>{{item.temperature?item.temperature:'-'}}</td>
+        <td>{{item.humidity?item.humidity:'-'}}</td>
+        <td>{{item.gravity?item.gravity:'-'}}</td>
+        <td>{{item.airPressure?item.airPressure:'-'}}</td>
+        <td>{{item.status?item.status:'-'}}</td>
+        <td>{{item.battery?item.battery:'-'}}</td>
       </tr>
     </table>
   </div>
@@ -73,26 +73,26 @@
             </div>
             <div class="overview-row">
               <div class="overview-row-left">
-                数量：111
+                数量: {{totalBeeBoxNum}}
               </div>
               <div class="overview-row-right">
-                正常
+                正常:{{normalBeeBoxNum}}
               </div>
             </div>
             <div class="overview-row">
               <div class="overview-row-left">
-                正在运行：111
+               策略保护:{{protectionNum}}
               </div>
               <div class="overview-row-right">
-                异常
+                异常:{{abnormalBeeBoxNum}}
               </div>
             </div>
             <div class="overview-row">
               <div class="overview-row-left">
-                离线
+                非策略保护:{{noProtectionNum}}
               </div>
               <div class="overview-row-right">
-                策略维护
+                离线:{{offLineBeeBoxNum}}
               </div>
             </div>
           </div>
@@ -107,47 +107,7 @@
     </div>
   </div>
   <!-- <div class="hive-left">
-    <el-table :data="hiveList" border style="width: 100%" max-height="600px" @current-change="handleCurrentChange">
-      <el-table-column prop="boxId" label="蜂箱ID" width="70">
-      </el-table-column>
-      <el-table-column prop="temperature" label="温度" width="70">
-      </el-table-column>
-      <el-table-column prop="humidity" label="湿度" width="70">
-      </el-table-column>
-      <el-table-column prop="gravity" label="重量" width="70">
-      </el-table-column>
-      <el-table-column prop="airPressure" label="压强" width="70">
-      </el-table-column>
-      <el-table-column prop="status" label="状态" width="70">
-      </el-table-column>
-      <el-table-column prop="battery" label="电量" width="70">
-      </el-table-column>
-    </el-table>
-  </div>
-  <div class="hive-right">
-    <div class="hive-info">
-      <el-row>
-        蜂箱信息
-      </el-row>
-      <el-row>
-        <el-col :span="6">蜂箱ID</el-col>
-        <el-col :span="3">
-          <el-input v-model="boxId" @keyup.native.enter="info_search"></el-input>
-        </el-col>
-        <el-col :span="3">出厂批次</el-col>
-        <el-col :span="3">{{batchNo}}</el-col>
-        <el-col :span="3">产商</el-col>
-        <el-col :span="4">{{manufacturer}}</el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="6">蜂箱定位</el-col>
-        <el-col :span="6"></el-col>
-        <el-col :span="3">生产日期</el-col>
-        <el-col :span="5">{{productionDate}}</el-col>
-        <el-col :span="3">状态</el-col>
-        <el-col :span="3">{{status}}</el-col>
-      </el-row>
-    </div>
+  
     <div class="block">
       <span class="demonstration">选择时间</span>
       <el-date-picker v-model="date" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
@@ -158,28 +118,7 @@
 
       <fold refs="fold"></fold>
     </div>
-    <div class="hive-overview-pie">
-      <div class="hive-overview">
-        <el-row>
-          <el-col :span="8">总览</el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="5">总量</el-col>
-          <el-col :span="3">{{totalBeeBoxNum}}</el-col>
-          <el-col :span="3">策略保护</el-col>
-          <el-col :span="3">{{protectionNum}}</el-col>
-          <el-col :span="5">非策略保护</el-col>
-          <el-col :span="4">{{noProtectionNum}}</el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="5">正常</el-col>
-          <el-col :span="3">{{normalBeeBoxNum}}</el-col>
-          <el-col :span="3">异常</el-col>
-          <el-col :span="3">{{abnormalBeeBoxNum}}</el-col>
-          <el-col :span="5">离线</el-col>
-          <el-col :span="4">{{offLineBeeBoxNum}}</el-col>
-        </el-row>
-      </div>
+   
       <div class="hive-pie">
         <echartspie ref="hive"></echartspie>
       </div>
@@ -216,7 +155,6 @@ export default {
 			normalBeeBoxNum: '',
 			offLineBeeBoxNum: '',
 			protectionNum: '',
-			// runningBeeBoxNum: stat.runningBeeBoxNum,
 			totalBeeBoxNum: '',
 			date: '',
 			boxId: '',
@@ -227,7 +165,6 @@ export default {
 			productionDate: '',
 			status: '',
 			id: '',
-			date: '',
 		};
 	},
 	created: function() {
@@ -235,9 +172,11 @@ export default {
 	},
 
 	methods: {
-    slectThisRow(id){
-    //  this.idChange(id)
-    },
+		slectThisRow(boxId) {
+			this.boxId = boxId;
+			this.info_search(boxId);
+			
+		},
 		// 返回单个box的信息
 		idChange(boxId) {
 			// console.log(id)
@@ -257,7 +196,7 @@ export default {
 		// 日期搜索时，获取相关数据，关闭定时器，必须先选择table中某一行
 		dateChange(date) {
 			//时间选择
-			console.log(1111, date[0], date[1]);
+			console.log(1111, date[0], date[1],this.boxId);
 			let _this = this;
 			let beginDate = new Date(date[0]).getTime();
 			let endDate = new Date(date[1]).getTime();
@@ -281,19 +220,19 @@ export default {
 			result.then(function(res) {
 				console.log(123456, res);
 				let data = res.data.data;
-				console.log(data, 123);
+				_this.boxId = data.boxId;
 				_this.batchNo = data.batchNo;
 				_this.manufacturer = data.manufacturer;
 				_this.productionDate = moment(data.productionDate).format('YYYY-MM-DD');
 				if (data.status === 0) _this.status = '正在运行';
 				else if (data.status === 2) _this.status = '异常';
-        else if (data.status === 3) _this.status = '离线';
-        _this.lat =data.lat;
-        _this.lng = data.lng;
+				else if (data.status === 3) _this.status = '离线';
+				_this.lat = data.lat;
+				_this.lng = data.lng;
 			});
 		},
 		handleCurrentChange(val) {
-      console.log(99999,val);
+			console.log(99999, val);
 			// this.currentRow = val;
 			this.boxId = val.boxId;
 			this.lat = val.lat;
@@ -304,8 +243,8 @@ export default {
 			let _this = this;
 			let result = get('/getAllBeeBoxSensorData', null);
 			result.then(function(res) {
-				// console.log(res);
-				if (res.data.responseCode) {
+				console.log(123, res);
+				if (res.data.responseCode === '000000') {
 					let data = res.data.data.latestSensorData;
 					let stat = res.data.data;
 					_this.abnormalBeeBoxNum = stat.abnormalBeeBoxNum;
@@ -313,7 +252,6 @@ export default {
 					_this.normalBeeBoxNum = stat.normalBeeBoxNum;
 					_this.offLineBeeBoxNum = stat.offLineBeeBoxNum;
 					_this.protectionNum = stat.protectionNum;
-					// runningBeeBoxNum: stat.runningBeeBoxNum,
 					_this.totalBeeBoxNum = stat.totalBeeBoxNum;
 					let obj = {
 						abnormalBeeBoxNum: stat.abnormalBeeBoxNum,
@@ -321,27 +259,21 @@ export default {
 						normalBeeBoxNum: stat.normalBeeBoxNum,
 						offLineBeeBoxNum: stat.offLineBeeBoxNum,
 						protectionNum: stat.protectionNum,
-						// runningBeeBoxNum: stat.runningBeeBoxNum,
 						totalBeeBoxNum: stat.totalBeeBoxNum,
 					};
+					// 画扇形图
 					_this.$refs.hive.drawLine(obj);
+					// 将值赋值给列表
 					for (let obj of data) {
-						console.log(obj);
-						if (obj.boxId) {
-							obj.temperature = obj.temperature || '-';
-							obj.humidity = obj.humidity || '-';
-							obj.gravity = obj.gravity || '-';
-							obj.airPressure = obj.airPressure || '-';
-							if (obj.status === 0) obj.status = '正在运行';
-							else if (obj.status === 2) obj.status = '异常';
-							else if (obj.status === 3) obj.status = '离线';
-							obj.battery = obj.battery || '-';
-						}
+						if (obj.status === 0) obj.status = '正在运行';
+						else if (obj.status === 2) obj.status = '异常';
+						else if (obj.status === 3) obj.status = '离线';
 					}
 					_this.hiveList = data;
-					if(data.length>0){
-
-          }
+					if (data.length > 0) {
+						_this.boxId = data[0].boxId;
+						_this.info_search(_this.boxId);
+					}
 				}
 			});
 		},
@@ -487,7 +419,7 @@ table tr th {
 .overview-chart-left {
 	width: 45%;
 	height: 100%;
-  font-size: 14px;
+	font-size: 14px;
 }
 
 .overview-chart-right {

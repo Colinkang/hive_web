@@ -1,10 +1,9 @@
 <template>
 <div class="map-box">
   <div class="map">
-    <baidu-map style="width:100%;height:100%" center="北京">
-      <bm-marker :position="{lng: 116.404, lat: 39.915}" :dragging="true">
-
-      </bm-marker>
+    <baidu-map style="width:100%;height:100%" center="北京" :zoom="zoom" @ready="getPoints">
+      <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT"></bm-city-list>
+			<bm-point-collection :points="points" shape="BMAP_POINT_SHAPE_CIRCLE" color="red" size="BMAP_POINT_SIZE_NORMAL" @click="clickHandler"></bm-point-collection>
     </baidu-map>
   </div>
   <div class="detail">
@@ -14,7 +13,7 @@
         <changeble-input :value="boxId" @change='info_search'></changeble-input>
       </div>
       <div class="data-detail-row">
-        蜂箱定位:
+        蜂箱定位:{{lat}},{{lng}}
       </div>
     </div>
 
@@ -31,7 +30,7 @@
             温度
           </div>
           <div class="data-update-row-value">
-            1314
+            {{real.temperature}}
           </div>
         </div>
       </div>
@@ -44,7 +43,7 @@
             湿度
           </div>
           <div class="data-update-row-value">
-            1314
+            {{real.humidity}}
           </div>
         </div>
       </div>
@@ -57,7 +56,7 @@
             压强
           </div>
           <div class="data-update-row-value">
-            1314
+            {{real.airPressure}}
           </div>
         </div>
       </div>
@@ -70,7 +69,7 @@
             重量
           </div>
           <div class="data-update-row-value">
-            1314
+            {{real.gravity}}
           </div>
         </div>
       </div>
@@ -83,7 +82,7 @@
             电量
           </div>
           <div class="data-update-row-value">
-            1314
+             {{battery}}
           </div>
         </div>
       </div>
@@ -101,263 +100,217 @@
     </div>
   </div>
 </div>
-<!-- <div class="global">
-        <div class="global-map">
-
-        </div>
-        <div class="global-content">
-           <div class ="map-hive">
-                 <el-row>
-                   <el-col :span="12">蜂箱ID</el-col>
-                   <el-col :span="12">
-                       <el-input v-model="boxId"></el-input>
-                   </el-col>
-                 </el-row>
-                  <el-row>
-                   <el-col :span="12">蜂箱定位</el-col>
-                   <el-col :span="12">
-                      <el-input v-model="boxPosition"></el-input>
-                   </el-col>
-                 </el-row>
-
-           </div>
-           <div class ="map-hive-real" >
-               <el-row>
-                  实时数据
-              </el-row>
-              <el-row>
-                   <el-col :span="12"><div ></div></el-col>
-                   <el-col :span="12"><div >{{1234}}</div></el-col>
-              </el-row>
-              <el-row>
-                   <el-col :span="12"><div ></div></el-col>
-                   <el-col :span="12"><div >{{1234}}</div></el-col>
-              </el-row>
-              <el-row>
-                   <el-col :span="12"><div ></div></el-col>
-                   <el-col :span="12"><div >{{1234}}</div></el-col>
-              </el-row>
-              <el-row>
-                   <el-col :span="12"><div ></div></el-col>
-                   <el-col :span="12"><div >{{1234}}</div></el-col>
-              </el-row>
-              <el-row>
-                   <el-col :span="12"><div ></div></el-col>
-                   <el-col :span="12"><div >{{1234}}</div></el-col>
-              </el-row>
-              <el-row>
-                   <el-col :span="12"><div ></div></el-col>
-                   <el-col :span="12"><div >{{1234}}</div></el-col>
-              </el-row>
-           </div>
-           <div class ="map-hive-search">
-             <el-row>
-                   <el-col :span="12"><div >姓名</div></el-col>
-                   <el-col :span="12"><div >{{1234}}</div></el-col>
-              </el-row>
-           </div>
-        </div>
-    </div> -->
 </template>
 <script>
-import {
-  get,
-  post
-} from '../../common/post.js';
+import { get, post } from '../../common/post.js';
 import IdSelect from '../../baseCom/IdSelect';
 import ChangebleInput from '../../baseCom/ChangebleInput';
 export default {
-  components: {
-    IdSelect,
-    ChangebleInput
-  },
-  data() {
-    return {
-      boxId: '111',
-      boxPosition: '',
-    };
-  },
-  created: function() {
-    let _this = this;
-    let result = get('/getAllBeeBoxSensorData', null);
-    result.then(function(res) {
-      if (res.data.responseCode) {
+	components: {
+		IdSelect,
+		ChangebleInput,
+	},
+	data() {
+		return {
+			points: [],
+			boxId: '1',
+			zoom: 6,
+			lat: '',
+			lng: '',
+			real: {},
+		};
+	},
+	methods: {
+		// 获取数据显示在地图上经纬度
+		getPoints() {
+			let _this = this;
+			let points = [];
+			let result = get('/getAllBeeBoxSensorData', null);
+			result.then(res => {
+				if (res.data.responseCode === '000000') {
+					console.log(res.data.data);
+					let latestSensorData = res.data.data.latestSensorData;
 
-      }
-    });
-  },
-  // mounted: function() {},
-  methods: {
-    getRealData() {
-      let _this = this;
-      setInterval(function() {
-        let result = post('/getBeeBoxSensorDate', {
-          beeBoxId: _this.boxId
-        });
-        result.then(function(res) {});
-      }, 1000);
-    },
-    idSelectSearch(id) {
-      console.log(id)
-    },
-    info_search(id) {
+					for (let d of latestSensorData) {
+						console.log(d);
+						const position = { lng: d.lng, lat: d.lat };
+						points.push(position);
+					}
+					_this.points = points;
+					if (latestSensorData.length > 0) {
+						_this.boxId = latestSensorData[0].boxId;
+						_this.lat = latestSensorData[0].lat;
+						_this.lng = latestSensorData[0].lng;
+					}
+				}
+			});
+		},
+		//点击图上的某个点
+		clickHandler(e) {
+			alert(`单击点的坐标为：${e.point.lng}, ${e.point.lat}`);
+		},
+		//获取蜂箱的实时数据
+		getRealData() {
+			let _this = this;
+			setInterval(function() {
+				let result = post('/getBeeBoxSensorDate', {
+					beeBoxId: _this.boxId,
+				});
+				result.then(function(res) {
+					let data = res.data.data;
+					if (res.data.responseCode === '000000') {
+						_this.real.temperature = data.temperature;
+						_this.real.humidity = data.humidity;
+						_this.real.gravity = data.gravity;
+						_this.real.airPressure = data.airPressure;
+						_this.real.battery = data.battery;
+					}
+				});
+			}, 5 * 1000);
+		},
+		// 通过蜂箱ID搜索数据
+		info_search(id) {
+			let _this = this;
+			let result = post('/getBeeBox', {
+				beeBoxId: boxId,
+			});
+			result.then(function(res) {
+				console.log(123456, res);
+				let data = res.data.data;
+				_this.boxId = data.boxId;
+				_this.lat = data.lat;
+				_this.lng = data.lng;
+			});
+		},
 
-    }
-  },
+		//模糊查询
+		idSelectSearch(id) {
+			console.log(id);
+			console.log(11119, id);
+			let result = post('/beeBoxSearch', {
+				keyword: '1',
+			});
+			result.then(res => {
+				console.log(result);
+			});
+		},
+	},
 };
 </script>
 <style>
-/* The container of BaiduMap must be set width & height. */
-
-/* .map {
-	width: 60%;
-	height: 500px;
-}
-.global {
-	background-color: rgb(26, 26, 26);
-	width: 100%;
-	height: 900px;
-	display: flex;
-}
-.global-map {
-	margin-left: 10px;
-	margin-top: 30px;
-	width: 100%;
-	height: 00px;
-}
-.map-hive {
-	width: 200px;
-	height: 200px;
-}
-.map-hive-real {
-	width: 200px;
-	height: 200px;
-}
-.map-hive-search {
-	width: 200px;
-	height: 200px;
-} */
-
-/* 我的样式 */
-
 .map-box {
-  position: relative;
-  width: calc(100% - 10px);
-  height: calc(100% - 10px);
-  display: flex;
-  justify-content: space-between;
-
+	position: relative;
+	width: calc(100% - 10px);
+	height: calc(100% - 10px);
+	display: flex;
+	justify-content: space-between;
 }
 
 .map {
-  position: relative;
-  width: calc( 100% - 300px);
-  height: 100%;
+	position: relative;
+	width: calc(100% - 300px);
+	height: 100%;
 }
 
 .detail {
-  width: 250px;
-  height: 100%;
-  margin-right: 20px;
-
+	width: 250px;
+	height: 100%;
+	margin-right: 20px;
 }
 
 .data-detail {
-  position: relative;
-  width: 100%;
-  height: 100px;
-  border: 1px solid #362f2e;
-  background: #362f2e;
-  margin-top: 20px;
-
+	position: relative;
+	width: 100%;
+	height: 100px;
+	border: 1px solid #362f2e;
+	background: #362f2e;
+	margin-top: 20px;
 }
 
 .data-detail-row {
-  margin-top: 20px;
-  width: 100%;
-  text-align: left;
-  text-indent: 30px;
-  color: #ed9e10;
-  font-size: 14px;
+	margin-top: 20px;
+	width: 100%;
+	text-align: left;
+	text-indent: 30px;
+	color: #ed9e10;
+	font-size: 14px;
 }
 
 .data-update-data {
-  width: 100%;
-  height: 300px;
-  background: #dddddc;
-  margin-top: 20px;
+	width: 100%;
+	height: 300px;
+	background: #dddddc;
+	margin-top: 20px;
 }
 
 .data-update-title {
-  width: 100%;
-  text-align: left;
-  height: 40px;
-  line-height: 40px;
-  text-indent: 20px;
-  font-size: 12px;
+	width: 100%;
+	text-align: left;
+	height: 40px;
+	line-height: 40px;
+	text-indent: 20px;
+	font-size: 12px;
 }
 
 .data-update-row {
-  position: relative;
-  width: 100%;
-  height: 50px;
-  border-top: 1px solid #bbb9b8;
-  text-align: left;
-
+	position: relative;
+	width: 100%;
+	height: 50px;
+	border-top: 1px solid #bbb9b8;
+	text-align: left;
 }
 
 .icon-box {
-  width: 30px;
-  height: 30px;
-  color: white;
-  background: #5c5651;
-  border-radius: 50%;
-  text-align: center;
-  line-height: 30px;
-  margin-top: 10px;
-  position: absolute;
-  left: 20px;
+	width: 30px;
+	height: 30px;
+	color: white;
+	background: #5c5651;
+	border-radius: 50%;
+	text-align: center;
+	line-height: 30px;
+	margin-top: 10px;
+	position: absolute;
+	left: 20px;
 }
 
 .data-update-row-text {
-  position: absolute;
-  left: 55px;
-  height: 40px;
-  font-size: 10px;
-  width: 100px;
-  text-align: left;
+	position: absolute;
+	left: 55px;
+	height: 40px;
+	font-size: 10px;
+	width: 100px;
+	text-align: left;
 }
 
 .data-update-row-name {
-  margin-top: 8px;
-  line-height: 13px;
-  font-size: 9px;
-  transform: scale(0.7);
-  transform-origin: 0 50%;
+	margin-top: 8px;
+	line-height: 13px;
+	font-size: 9px;
+	transform: scale(0.7);
+	transform-origin: 0 50%;
 }
 
 .data-update-row-value {
-  line-height: 25px;
-  font-size: 12px;
+	line-height: 25px;
+	font-size: 12px;
 }
 
 .status-box {
-  width: 100%;
-  height: 150px;
-  background: #dddddc;
-  margin-top: 20px;
-
+	width: 100%;
+	height: 150px;
+	background: #dddddc;
+	margin-top: 20px;
 }
-.face{
-  margin-top: 20px;
-  font-size: 20px;
+.face {
+	margin-top: 20px;
+	font-size: 20px;
 }
-.data-id-select-box{
-  margin-top: 20px;
+.data-id-select-box {
+	margin-top: 20px;
 }
-.demo{
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.demo {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 </style>
