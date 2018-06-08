@@ -10,7 +10,7 @@
     <div class="data-detail">
       <div class="data-detail-row">
         蜂箱ID:
-        <changeble-input :value="boxId" @change='info_search'></changeble-input>
+        <changeble-input :value="BeeBoxId" @change='info_search'></changeble-input>
       </div>
       <div class="data-detail-row">
         蜂箱定位:{{lat}},{{lng}}
@@ -82,7 +82,7 @@
             电量
           </div>
           <div class="data-update-row-value">
-             {{battery}}
+             {{real.battery}}
           </div>
         </div>
       </div>
@@ -113,12 +113,15 @@ export default {
 	data() {
 		return {
 			points: [],
-			boxId: '1',
+			BeeBoxId: '1',
 			zoom: 6,
 			lat: '',
 			lng: '',
 			real: {},
 		};
+	},
+	created() {
+		// this.getRealData();
 	},
 	methods: {
 		// 获取数据显示在地图上经纬度
@@ -138,7 +141,7 @@ export default {
 					}
 					_this.points = points;
 					if (latestSensorData.length > 0) {
-						_this.boxId = latestSensorData[0].boxId;
+						_this.BeeBoxId = latestSensorData[0].boxId;
 						_this.lat = latestSensorData[0].lat;
 						_this.lng = latestSensorData[0].lng;
 					}
@@ -154,10 +157,11 @@ export default {
 			let _this = this;
 			setInterval(function() {
 				let result = post('/getBeeBoxSensorDate', {
-					beeBoxId: _this.boxId,
+					beeBoxId: _this.BeeBoxId,
 				});
 				result.then(function(res) {
 					let data = res.data.data;
+					console.log(1234,data);
 					if (res.data.responseCode === '000000') {
 						_this.real.temperature = data.temperature;
 						_this.real.humidity = data.humidity;
@@ -165,14 +169,16 @@ export default {
 						_this.real.airPressure = data.airPressure;
 						_this.real.battery = data.battery;
 					}
+					console.log(99999,_this.real);
 				});
-			}, 5 * 1000);
+			}, 1000);
 		},
 		// 通过蜂箱ID搜索数据
 		info_search(id) {
+			console.log(222, id);
 			let _this = this;
 			let result = post('/getBeeBox', {
-				beeBoxId: boxId,
+				beeBoxId: id,
 			});
 			result.then(function(res) {
 				console.log(123456, res);
@@ -185,8 +191,7 @@ export default {
 
 		//模糊查询
 		idSelectSearch(id) {
-			console.log(id);
-			console.log(11119, id);
+			console.log(1111981212121212, id);
 			let result = post('/beeBoxSearch', {
 				keyword: '1',
 			});
