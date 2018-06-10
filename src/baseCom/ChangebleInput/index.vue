@@ -10,7 +10,7 @@ export default {
   props:{
     value:{
       type:[String, Number],
-      default:'text22222'
+      default:'text'
     }
   },
   name: "",
@@ -21,9 +21,7 @@ export default {
   }),
   computed:{
     lisenValueChange(){
-      console.log(1234567,this.value)
       this.nextValue =this.value
-      return this.value
     }
   },
   methods:{

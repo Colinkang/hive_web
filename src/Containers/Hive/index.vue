@@ -113,7 +113,7 @@
     </div>
   </div>
   <!-- <div class="hive-left">
-  
+
     <div class="block">
       <span class="demonstration">选择时间</span>
       <el-date-picker v-model="date" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
@@ -124,7 +124,10 @@
 
       <fold refs="fold"></fold>
     </div>
-   
+
+      <div class="hive-pie">
+        <echartspie ref="hive"></echartspie>
+      </div>
       <div>
         <el-input placeholder="请输入蜂箱ID" v-model="hive_like_id">
           <i slot="prefix" class="el-input__icon el-icon-search"></i>
@@ -343,7 +346,8 @@ export default {
 					beeBoxId: _this.BeeBoxId,
 				});
 				result.then(res => {
-					if (res.data.responseCode === '000000') {
+					if(res.data.responseCode === '000000'){
+
 					}
 				});
 			}, 1000);
