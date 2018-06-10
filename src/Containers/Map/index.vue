@@ -13,8 +13,14 @@
         <changeble-input :value="BeeBoxId" @change='info_search'></changeble-input>
       </div>
       <div class="data-detail-row">
-        蜂箱定位:{{lat}},{{lng}}
+        蜂箱定位:{{lng}},{{lat}}
       </div>
+			<el-row class="line-height margin-top" v-if="beeBoxShowAlert">
+        <el-col :span="24">
+          <el-alert :title="text" :type="status==='wrong'?'error':'success'">
+          </el-alert>
+        </el-col>
+      </el-row>
     </div>
 
     <div class="data-update-data">
@@ -91,8 +97,14 @@
       <div class="data-update-title">
         实时数据
       </div>
-      <div class="face">
+			<div class="face" v-if="status===2">
+        <i class="iconfont icon-cry" style="font-size:20px;"></i>异常
+      </div>
+      <div class="face" v-else-if="status===0" >
         <i class="iconfont icon-smile" style="font-size:20px;"></i>正常
+      </div>
+			 <div class="face" v-else>
+        <i class="iconfont icon-cry" style="font-size:20px;"></i>离线
       </div>
     </div>
     <div class="data-id-select-box">
@@ -112,12 +124,14 @@ export default {
 	},
 	data() {
 		return {
+			beeBoxShowAlert: false,
 			points: [],
 			BeeBoxId: '1',
 			zoom: 6,
 			lat: '',
 			lng: '',
 			real: {},
+			status: 3,
 		};
 	},
 	created() {
@@ -159,9 +173,10 @@ export default {
 				let result = post('/getBeeBoxSensorDate', {
 					beeBoxId: _this.BeeBoxId,
 				});
+				console.log(111111, _this.beeBoxId);
 				result.then(function(res) {
 					let data = res.data.data;
-					console.log(1234,data);
+					console.log(1234, data);
 					if (res.data.responseCode === '000000') {
 						_this.real.temperature = data.temperature;
 						_this.real.humidity = data.humidity;
@@ -169,23 +184,35 @@ export default {
 						_this.real.airPressure = data.airPressure;
 						_this.real.battery = data.battery;
 					}
-					console.log(99999,_this.real);
+					console.log(99999, _this.real);
 				});
-			}, 1000);
+			}, 5000);
 		},
 		// 通过蜂箱ID搜索数据
 		info_search(id) {
 			console.log(222, id);
 			let _this = this;
+			_this.lat = '';
+			_this.lng = '';
 			let result = post('/getBeeBox', {
 				beeBoxId: id,
 			});
 			result.then(function(res) {
 				console.log(123456, res);
 				let data = res.data.data;
-				_this.boxId = data.boxId;
-				_this.lat = data.lat;
-				_this.lng = data.lng;
+				console.log(12345, data);
+				if (data) {
+					_this.beeBoxId = data.boxId;
+					_this.lat = data.lat;
+					_this.lng = data.lng;
+				} else {
+					_this.beeBoxShowAlert = true;
+					_this.status = 'wrong';
+					_this.text = '该蜂箱不存在';
+					setTimeout(function() {
+						_this.beeBoxShowAlert = false;
+					}, 3000);
+				}
 			});
 		},
 

@@ -11,7 +11,7 @@
         <th>状态</th>
         <th>电量</th>
       </tr>
-      <tr v-for="(item) in hiveList" :key='item.boxId' @click="slectThisRow(item.boxId)">
+      <tr v-for="(item) in hiveList" :key='item.id' @click="slectThisRow(item.boxId)">
         <td>{{item.boxId?item.boxId:'-'}}</td>
         <td>{{item.temperature?item.temperature:'-'}}</td>
         <td>{{item.humidity?item.humidity:'-'}}</td>
@@ -50,6 +50,12 @@
           状态:{{status}}
         </div>
       </div>
+			<el-row class="line-height margin-top" v-if="beeBoxShowAlert">
+        <el-col :span="24">
+          <el-alert :title="text" :type="showStatus==='wrong'?'error':'success'">
+          </el-alert>
+        </el-col>
+      </el-row>
     </div>
     <div class="chart-box">
       <div class="section-title">
@@ -145,6 +151,7 @@ export default {
 	},
 	data() {
 		return {
+			beeBoxShowAlert: '',
 			hiveList: [],
 			abnormalBeeBoxNum: '',
 			noProtectionNum: '',
@@ -161,6 +168,8 @@ export default {
 			productionDate: '',
 			status: '',
 			id: '',
+			text: '',
+			showStatus: '',
 		};
 	},
 	created: function() {
@@ -172,7 +181,7 @@ export default {
 		slectThisRow(boxId) {
 			this.BeeBoxId = boxId;
 			this.info_search(boxId);
-			this.clickBoxId(boxId)
+			this.clickBoxId(boxId);
 		},
 
 		// 返回单个box的信息
@@ -239,21 +248,38 @@ export default {
 		// 输入蜂箱ID，获取蜂箱信息
 		info_search(boxId) {
 			let _this = this;
+			_this.lat = '';
+			_this.lng = '';
+			_this.batchNo = '';
+			_this.manufacturer = '';
+			_this.productionDate = '';
+			_this.status = '';
 			let result = post('/getBeeBox', {
 				beeBoxId: boxId,
 			});
 			result.then(function(res) {
 				console.log(123456, res);
-				let data = res.data.data;
-				_this.boxId = data.boxId;
-				_this.batchNo = data.batchNo;
-				_this.manufacturer = data.manufacturer;
-				_this.productionDate = moment(data.productionDate).format('YYYY-MM-DD');
-				if (data.status === 0) _this.status = '正在运行';
-				else if (data.status === 2) _this.status = '异常';
-				else if (data.status === 3) _this.status = '离线';
-				_this.lat = data.lat;
-				_this.lng = data.lng;
+				if (res.data.responseCode === '000000') {
+					let data = res.data.data;
+					if (data) {
+						_this.boxId = data.boxId;
+						_this.batchNo = data.batchNo;
+						_this.manufacturer = data.manufacturer;
+						_this.productionDate = moment(data.productionDate).format('YYYY-MM-DD');
+						if (data.status === 0) _this.status = '正在运行';
+						else if (data.status === 2) _this.status = '异常';
+						else if (data.status === 3) _this.status = '离线';
+						_this.lat = data.lat;
+						_this.lng = data.lng;
+					} else {
+						_this.beeBoxShowAlert = true;
+						_this.showStatus = 'wrong';
+						_this.text = '该蜂箱不存在';
+						setTimeout(function() {
+							_this.beeBoxShowAlert = false;
+						}, 1000);
+					}
+				}
 			});
 		},
 		// 获取初始页面的数据table，以及策略保护和非策略保护数据
@@ -289,6 +315,7 @@ export default {
 						else if (obj.status === 2) obj.status = '异常';
 						else if (obj.status === 3) obj.status = '离线';
 					}
+					console.log(1222222, data);
 					_this.hiveList = data;
 					if (data.length > 0) {
 						_this.BeeBoxId = data[0].boxId;
@@ -311,13 +338,12 @@ export default {
 		// 点击table中的某一行开始轮询获取相关数据，放入折线图中,开始搜索后则关闭该轮询
 		clickBoxId() {
 			let _this = this;
-			 intervalTime =setInterval(function() {
+			let intervalTime = setInterval(function() {
 				let result = post('/getBeeBoxSensorDate', {
 					beeBoxId: _this.BeeBoxId,
 				});
 				result.then(res => {
-					if(res.data.responseCode === '000000'){
-						
+					if (res.data.responseCode === '000000') {
 					}
 				});
 			}, 1000);

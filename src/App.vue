@@ -12,16 +12,16 @@ export default {
     Root
   },
   mounted(){
-    this.$router.push({
-      path:'/hive/map'
-    })
+    // this.$router.push({
+    //   path:'/hive/map'
+    // })
   }
 }
 </script>
 
 <style>
 html,body{
-  min-width: 1440px;
+  min-width: 1280px;
   margin: 0;
   padding: 0;
   height: 100%;
