@@ -145,6 +145,7 @@ import fold from './fold.vue';
 import moment from 'moment';
 import ChangebleInput from '../../baseCom/ChangebleInput';
 import IdSelect from '../../baseCom/IdSelect';
+let   timemer;
 export default {
 	components: {
 		echartspie,
@@ -354,6 +355,7 @@ export default {
 			clearInterval(intervalTime);
 		},
 	},
+
 };
 </script>
 

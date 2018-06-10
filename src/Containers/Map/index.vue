@@ -108,7 +108,7 @@
       </div>
     </div>
     <div class="data-id-select-box">
-      <id-select @change="idSelectSearch"></id-select>
+      <id-select @idSelectSearch="idSelectSearch"></id-select>
     </div>
   </div>
 </div>
@@ -218,7 +218,7 @@ export default {
 
 		//模糊查询
 		idSelectSearch(id) {
-			console.log(1111981212121212, id);
+      console.log(id)
 			let result = post('/beeBoxSearch', {
 				keyword: '1',
 			});

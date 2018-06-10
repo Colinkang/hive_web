@@ -22,7 +22,7 @@ import { post } from '../../common/post.js';
 export default {
 	name: '',
 	data: () => ({
-		list: [],
+		list: [1,3,423,4,35423,45],
 		selectId: '',
 	}),
 	methods: {
@@ -31,6 +31,7 @@ export default {
 				this.selectId = id;
 				this.$emit('idSelectSearch', id);
 			}
+
 		},
 		getList(e) {
 			console.log(e.target.value);
