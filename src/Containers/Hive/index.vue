@@ -30,7 +30,7 @@
       <div class="dtail-row">
         <div class="detail-col">
           蜂箱ID:
-          <changeble-input :value="boxId" @change='info_search'></changeble-input>
+          <changeble-input :value="BeeBoxId" @change='info_search'></changeble-input>
         </div>
         <div class="detail-col">
           出厂批次: {{batchNo}}
@@ -56,11 +56,11 @@
         历史数据折线图
       </div>
       <div style="text-align:left;padding-left:20px;margin-top:10px;">
-        <el-date-picker size='mini' v-model="date" @change="dateChange" value-format="YYYY-MM-dd" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+        <el-date-picker size='mini' v-model="date" @change="dateChange" value-format="yyyy-MM-dd" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
         </el-date-picker>
       </div>
       <div class="chart-line">
-        <fold refs="fold"></fold>
+        <fold ref="fool"></fold>
       </div>
 
     </div>
@@ -149,7 +149,6 @@ export default {
 	data() {
 		return {
 			hiveList: [],
-			hive_like_id: '',
 			abnormalBeeBoxNum: '',
 			noProtectionNum: '',
 			normalBeeBoxNum: '',
@@ -157,7 +156,7 @@ export default {
 			protectionNum: '',
 			totalBeeBoxNum: '',
 			date: '',
-			boxId: '2121221',
+			BeeBoxId: '',
 			lat: '',
 			lng: '',
 			batchNo: '',
@@ -172,10 +171,13 @@ export default {
 	},
 
 	methods: {
+		// 点击table中的行
 		slectThisRow(boxId) {
-			this.boxId = boxId;
+			this.BeeBoxId = boxId;
 			this.info_search(boxId);
+			this.clickBoxId(boxId)
 		},
+
 		// 返回单个box的信息
 		idChange(boxId) {
 			let _this = this;
@@ -193,21 +195,50 @@ export default {
 		// 日期搜索时，获取相关数据，关闭定时器，必须先选择table中某一行
 		dateChange(date) {
 			//时间选择
-			console.log(1111, date[0], date[1], this.boxId);
+			// console.log(1111, date, this.BeeBoxId);
 			let _this = this;
 			let beginDate = new Date(date[0]).getTime();
 			let endDate = new Date(date[1]).getTime();
-			let boxId = _this.boxId;
-			console.log(beginDate, endDate, boxId);
-			let result = post('/getChartSensorData', {
+			let BeeBoxId = _this.BeeBoxId;
+			console.log(beginDate, endDate, BeeBoxId);
+			let options = {
 				beginDate: beginDate,
 				endDate: endDate,
-				beeBoxId: boxId,
-			});
+				boxId: BeeBoxId,
+			};
+			console.log(1212, options);
+			let result = post('/getChartSensorData', options);
 			result.then(function(res) {
-				console.log(456, res.data);
+				let temperature = [];
+				let humidity = [];
+				let gravity = [];
+				let airPressure = [];
+				let battery = [];
+				let date = [];
+				if (res.data.responseCode === '000000') {
+					let data = res.data.data;
+					for (let d of data) {
+						temperature.push(d.temperature);
+						humidity.push(d.humidity);
+						gravity.push(d.gravity);
+						airPressure.push(d.airPressure);
+						battery.push(d.battery);
+						date.push(moment(data.createDate).format('YYYY-MM-DD hh:mm'));
+					}
+					let obj = {
+						temperature,
+						humidity,
+						gravity,
+						airPressure,
+						battery,
+						date,
+					};
+					console.log(1111111, obj);
+					_this.$refs.fool.drawFoldLine(obj);
+				}
 			});
 		},
+
 		// 输入蜂箱ID，获取蜂箱信息
 		info_search(boxId) {
 			let _this = this;
@@ -228,19 +259,12 @@ export default {
 				_this.lng = data.lng;
 			});
 		},
-		handleCurrentChange(val) {
-			console.log(99999, val);
-			// this.currentRow = val;
-			this.boxId = val.boxId;
-			this.lat = val.lat;
-			this.lng = val.lng;
-		},
 		// 获取初始页面的数据table，以及策略保护和非策略保护数据
 		getHiveList() {
 			let _this = this;
 			let result = get('/getAllBeeBoxSensorData', null);
 			result.then(function(res) {
-				 console.log(123, res);
+				console.log(123334, res);
 				if (res.data.responseCode === '000000') {
 					let data = res.data.data.latestSensorData;
 					let stat = res.data.data;
@@ -270,9 +294,9 @@ export default {
 					}
 					_this.hiveList = data;
 					if (data.length > 0) {
-						_this.boxId = data[0].boxId;
-						console.log(3456, _this.boxId);
-						_this.info_search(_this.boxId);
+						_this.BeeBoxId = data[0].boxId;
+						// 默认第一条蜂箱信息
+						_this.info_search(_this.BeeBoxId);
 					}
 				}
 			});
@@ -289,14 +313,18 @@ export default {
 		},
 		// 点击table中的某一行开始轮询获取相关数据，放入折线图中,开始搜索后则关闭该轮询
 		clickBoxId() {
-			setInterval(function() {
+			let _this = this;
+			 intervalTime =setInterval(function() {
 				let result = post('/getBeeBoxSensorDate', {
-					beeBoxId: 'boxid',
+					beeBoxId: _this.BeeBoxId,
 				});
 				result.then(res => {
-					console.log(res);
+					if(res.data.responseCode === '000000'){
+
+					}
 				});
-			}, 3 * 3600);
+			}, 1000);
+			clearInterval(intervalTime);
 		},
 	},
 };
