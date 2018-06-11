@@ -10,17 +10,11 @@
     <div class="data-detail">
       <div class="data-detail-row">
         蜂箱ID:
-        <changeble-input :value="BeeBoxId" @change='info_search'></changeble-input>
+        <changeble-input :value="beeBoxNo" @change='idSelectSearch'></changeble-input>
       </div>
       <div class="data-detail-row">
         蜂箱定位:{{lng}},{{lat}}
       </div>
-			<el-row class="line-height margin-top" v-if="beeBoxShowAlert">
-        <el-col :span="24">
-          <el-alert :title="text" :type="status==='wrong'?'error':'success'">
-          </el-alert>
-        </el-col>
-      </el-row>
     </div>
 
     <div class="data-update-data">
@@ -108,7 +102,7 @@
       </div>
     </div>
     <div class="data-id-select-box">
-      <id-select @change="idSelectSearch"></id-select>
+      <id-select @idSelectSearch="idSelectSearch"></id-select>
     </div>
   </div>
 </div>
@@ -117,6 +111,8 @@
 import { get, post } from '../../common/post.js';
 import IdSelect from '../../baseCom/IdSelect';
 import ChangebleInput from '../../baseCom/ChangebleInput';
+let timer;
+let sensorDataId;
 export default {
 	components: {
 		IdSelect,
@@ -124,9 +120,8 @@ export default {
 	},
 	data() {
 		return {
-			beeBoxShowAlert: false,
 			points: [],
-			BeeBoxId: '1',
+			beeBoxNo: '1',
 			zoom: 6,
 			lat: '',
 			lng: '',
@@ -135,7 +130,7 @@ export default {
 		};
 	},
 	created() {
-		// this.getRealData();
+		this.getRealData();
 	},
 	methods: {
 		// 获取数据显示在地图上经纬度
@@ -155,7 +150,7 @@ export default {
 					}
 					_this.points = points;
 					if (latestSensorData.length > 0) {
-						_this.BeeBoxId = latestSensorData[0].boxId;
+						_this.beeBoxNo = latestSensorData[0].beeBoxNo;
 						_this.lat = latestSensorData[0].lat;
 						_this.lng = latestSensorData[0].lng;
 					}
@@ -169,62 +164,72 @@ export default {
 		//获取蜂箱的实时数据
 		getRealData() {
 			let _this = this;
-			setInterval(function() {
-				let result = post('/getBeeBoxSensorDate', {
-					beeBoxId: _this.BeeBoxId,
-				});
-				console.log(111111, _this.beeBoxId);
+			sensorDataId = '';
+			console.log(33333, sensorDataId);
+			clearInterval(timer);
+			timer = setInterval(() => {
+				let result;
+				console.log(1, sensorDataId, _this.beeBoxNo);
+				if (!sensorDataId) {
+					result = post('/getBeeBoxSensorData', {
+						beeBoxNo: _this.beeBoxNo,
+					});
+				} else {
+					result = post('/getBeeBoxSensorData', {
+						beeBoxNo: _this.beeBoxNo,
+						sensorDataId: sensorDataId,
+					});
+				}
+				console.log(345, sensorDataId);
 				result.then(function(res) {
 					let data = res.data.data;
-					console.log(1234, data);
-					if (res.data.responseCode === '000000') {
-						_this.real.temperature = data.temperature;
-						_this.real.humidity = data.humidity;
-						_this.real.gravity = data.gravity;
-						_this.real.airPressure = data.airPressure;
-						_this.real.battery = data.battery;
+					console.log(1234, res.data, data);
+					if (res.data.responseCode === '000000' && data) {
+						_this.$set(_this.real, 'temperature', data.temperature);
+						_this.$set(_this.real, 'humidity', data.humidity);
+						_this.$set(_this.real, 'gravity', data.gravity);
+						_this.$set(_this.real, 'airPressure', data.airPressure);
+						_this.$set(_this.real, 'battery', data.battery);
+						_this.status = data.status;
+						sensorDataId = data.id;
 					}
 					console.log(99999, _this.real);
 				});
 			}, 5000);
 		},
-		// 通过蜂箱ID搜索数据
-		info_search(id) {
-			console.log(222, id);
+		// 通过蜂箱ID搜索数据  先把原有数据清空
+		info_search(beeBoxNo) {
 			let _this = this;
 			_this.lat = '';
 			_this.lng = '';
+			_this.status = '';
+			_this.real = {};
 			let result = post('/getBeeBox', {
-				beeBoxId: id,
+				beeBoxNo: beeBoxNo,
 			});
 			result.then(function(res) {
 				console.log(123456, res);
-				let data = res.data.data;
-				console.log(12345, data);
-				if (data) {
-					_this.beeBoxId = data.boxId;
-					_this.lat = data.lat;
-					_this.lng = data.lng;
-				} else {
-					_this.beeBoxShowAlert = true;
-					_this.status = 'wrong';
-					_this.text = '该蜂箱不存在';
-					setTimeout(function() {
-						_this.beeBoxShowAlert = false;
-					}, 3000);
+				if (res.data.responseCode === '000000') {
+					let data = res.data.data;
+					if (data) {
+						_this.beeBoxNo = data.beeBoxNo ? data.beeBoxNo : '';
+						_this.lat = data.lat;
+						_this.lng = data.lng;
+						_this.getRealData();
+					} else {
+						_this.$message({
+							message: '该蜂箱不存在',
+							type: 'warning',
+						});
+					}
 				}
 			});
 		},
 
-		//模糊查询
-		idSelectSearch(id) {
-			console.log(1111981212121212, id);
-			let result = post('/beeBoxSearch', {
-				keyword: '1',
-			});
-			result.then(res => {
-				console.log(result);
-			});
+		//查询
+		idSelectSearch(beeBoxNo) {
+			this.info_search(beeBoxNo);
+			this.getRealData();
 		},
 	},
 };

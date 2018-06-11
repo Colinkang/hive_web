@@ -35,14 +35,20 @@ export default {
 		getList(e) {
 			console.log(e.target.value);
 			//这里调用一个接口，模糊查询id列表，返回值付给list
-				console.log(1111981212121212);
+			console.log(1111981212121212);
 			let result = post('/beeBoxSearch', {
 				keyword: e.target.value,
 			});
 			result.then(res => {
-				console.log(34,res);
-				if(res.data.responseCode === '000000'){
-					console.log(9999,res.data.data);
+				console.log(34, res);
+				if (res.data.responseCode === '000000') {
+					console.log(9999, res.data.data);
+					if (res.data.responseCode === '000000') {
+						let data = res.data.data;
+						for (let d of data) {
+							this.list.push(d.beeBoxNo);
+						}
+					}
 				}
 			});
 		},

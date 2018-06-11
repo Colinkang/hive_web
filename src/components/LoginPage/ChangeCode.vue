@@ -9,19 +9,28 @@
       <div class="">
         <el-row class="form-row">
           <el-col :span="3">
-            新登录密码
+            登录用户名
           </el-col>
           <el-col :span="5">
-            <el-input size="mini" v-model.trim="fix.newPassword"  placeholder="请输入内容"></el-input>
+            <el-input size="mini" v-model.trim="fix.username"  placeholder="请输入登录用户名"></el-input>
           </el-col>
 
         </el-row>
         <el-row class="form-row">
           <el-col :span="3">
-            确认新密码
+            新登录密码
           </el-col>
           <el-col :span="5">
-            <el-input size="mini" v-model.trim="fix.newPasswordConfirm"  placeholder="请输入内容"></el-input>
+            <el-input size="mini" v-model.trim="fix.newPassword"  placeholder="请输入新登录密码"></el-input>
+          </el-col>
+
+        </el-row>
+        <el-row class="form-row">
+          <el-col :span="3">
+            确认新登录密码
+          </el-col>
+          <el-col :span="5">
+            <el-input size="mini" v-model.trim="fix.newPasswordConfirm"  placeholder="再次输入登录密码"></el-input>
           </el-col>
 
         </el-row>
@@ -30,41 +39,20 @@
             手机号
           </el-col>
           <el-col :span="5">
-            <el-input size="mini" v-model.trim="fix.mobile"  placeholder="请输入内容"></el-input>
+            <el-input size="mini" v-model.trim="fix.mobile"  placeholder="请输入手机号"></el-input>
           </el-col>
           <el-col :span="4">
-            <span class="sent-code" @click="sendCode">发送短信验证码</span>
+            <span class="sent-code" @click="sendCode">发送短信获取验证码</span>
           </el-col>
           <el-col :span="3" >
             验证码
           </el-col>
           <el-col :span="3">
-            <el-input size="mini" v-model.trim="fix.code"  placeholder="请输入内容"></el-input>
+            <el-input size="mini" v-model.trim="fix.code"  placeholder="请输入验证码"></el-input>
           </el-col>
 
         </el-row>
-        <!-- <el-row class="form-row">
-          <el-col :span="3" >
-            联系电话
-          </el-col>
-          <el-col :span="5">
-            1234567876543
-          </el-col>
-          <el-col :span="4">
-            <span class="sent-code">修改</span>
-          </el-col>
-
-
-        </el-row> -->
-        <!-- <el-row class="form-row">
-          <el-col :span="3">
-            组织
-          </el-col>
-          <el-col :span="5">
-            组织
-          </el-col>
-
-        </el-row> -->
+    
         <el-row class="form-row">
           <el-col :span="4">
             <el-button type="primary" @click="save">确认修改</el-button>
@@ -87,8 +75,6 @@
 <script>
 import { get, post } from '../../common/post.js';
 import { Validate, changeCodeSchema } from '../../common/schema.js';
-import { HIVE_USER_NAME } from '../../common/localStorageKey.js';
-import localStore from '../../common/localStore.js';
 export default {
 	name: '',
 	data: () => ({
@@ -100,34 +86,32 @@ export default {
 			mobile: '',
 			code: '',
 		},
-		status: '',
-		text: '',
 	}),
 	methods: {
 		sendCode() {
 			let result = post('/SMSService', {
 				mobile: this.fix.mobile,
-				userName: localStore.getItem(HIVE_USER_NAME),
+				userName: this.fix.username,
 				messageType: 2298872,
 			});
 			result.then(res => {
-				console.log(1234, res);
+				console.log(1234,res);
 				if (res.data.responseCode === '000000') {
 					console.log('获取验证码成功');
-				} else {
+				}else{
 					// this.$message('');
 				}
 			});
 		},
 		save() {
 			this.changeCodeShowAlert = true;
+
 			let input = {
-				userName: localStore.getItem(HIVE_USER_NAME),
+				userName: this.fix.username,
 				password: this.fix.newPassword,
 				mobile: this.fix.mobile,
 				smsCode: this.fix.code,
 			};
-			console.log(input, localStore.getItem(HIVE_USER_NAME), Validate(input, changeCodeSchema));
 			if (Validate(input, changeCodeSchema) !== null) {
 				this.status = 'wrong';
 				this.text = '输入项都不能为空';
@@ -143,7 +127,6 @@ export default {
 			} else {
 				let result = post('/updatePassword', input);
 				result.then(res => {
-					console.log(123, res);
 					if (res.data.responseCode === '000000') {
 						this.status = 'success';
 						this.text = '修改密码成功';
@@ -157,7 +140,6 @@ export default {
 							mobile: '',
 							code: '',
 						};
-						this.$router.back();
 					} else {
 						this.status = 'wrong';
 						this.text = '修改密码失败';
@@ -176,6 +158,7 @@ export default {
 </script>
 <style lang="" scoped>
 .container {
+	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -184,17 +167,17 @@ export default {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background: #3f3b3a;
+	background: rgb(94, 95, 95);
 	z-index: 1111;
 }
 .detail-box {
 	width: 80%;
 	height: 700px;
-	border: 1px solid #036eb8;
+	border: 1px solid rgb(222, 176, 50);
 }
 .section-top {
 	height: 250px;
-	background: #646260;
+	background: #ffa727;
 }
 .form-row {
 	height: 30px;

@@ -18,6 +18,7 @@
       </div>
       <div class="line-height margin-top">
         <el-checkbox v-model="checked" class="remenber-login">记住密码</el-checkbox>
+				<span class="sent-code" style="margin-left:20px;" @click="showChangeCode=true">忘记密码</span>
       </div>
       <div class="line-height margin-top">
         <button type="success" class="btn" @click="checkLoin">登录</button>
@@ -32,12 +33,13 @@
     </div>
 
   </div>
-
+	  <change-code v-if="showChangeCode" @hide="showChangeCode=false"></change-code>
 </div>
 </template>
 <script>
 import { Validate, loginSchema } from '../../common/schema.js';
 import { postLogin } from '../../common/post';
+import ChangeCode from './ChangeCode.vue';
 import {
 	HIVE_API_TOKEN,
 	HIVE_USER_NAME,
@@ -56,13 +58,15 @@ export default {
 		account: '',
 		password: '',
 		checked: false,
+		showChangeCode: false,
 	}),
 	components: {
 		updatepwd,
+		ChangeCode,
 	},
 	methods: {
 		checkLoin() {
-			if (Validate({ account: this.account, password: this.password }, loginSchema) !==null) {
+			if (Validate({ account: this.account, password: this.password }, loginSchema) !== null) {
 				this.showAlert = true;
 				this.status = 'wrong';
 				this.text = '用户名密码不能为空';
@@ -74,6 +78,7 @@ export default {
 				});
 				result.then(res => {
 					this.showAlert = true;
+					console.log(123456, res.data);
 					if (res.data.responseCode === '000000') {
 						this.status = 'success';
 						this.text = '验证成功，欢迎登陆';
@@ -85,6 +90,15 @@ export default {
 							LocalStore.setItem(HIVE_USER_PASSWORD, this.password);
 						}
 						LocalStore.setItem(IS_LOGIN, true);
+						if (res.data.data.firstTimeLogin === true) {
+							this.$message({
+								message: '第一次登陆，请先修改密码',
+								type: 'success',
+							});
+							this.$router.push({
+								path: '/beekeeper/changepwd',
+							});
+						}
 						this.$router.push({
 							path: '/hive/map',
 						});
@@ -196,5 +210,12 @@ input::-webkit-input-placeholder {
 
 .remenber-login {
 	color: white;
+}
+.sent-code {
+	color: white;
+}
+.sent-code:hover {
+	color: rgb(122, 122, 122);
+	cursor: pointer;
 }
 </style>

@@ -11,8 +11,8 @@
         <th>状态</th>
         <th>电量</th>
       </tr>
-      <tr v-for="(item) in hiveList" :key='item.id' @click="slectThisRow(item.boxId)">
-        <td>{{item.boxId?item.boxId:'-'}}</td>
+      <tr v-for="(item) in hiveList" :key='item.id' @click="slectThisRow(item.beeBoxNo)">
+        <td>{{item.beeBoxNo?item.beeBoxNo:'-'}}</td>
         <td>{{item.temperature?item.temperature:'-'}}</td>
         <td>{{item.humidity?item.humidity:'-'}}</td>
         <td>{{item.gravity?item.gravity:'-'}}</td>
@@ -30,7 +30,7 @@
       <div class="dtail-row">
         <div class="detail-col">
           蜂箱ID:
-          <changeble-input :value="BeeBoxId" @change='info_search'></changeble-input>
+          <changeble-input :value="beeBoxNo" @change='info_search'></changeble-input>
         </div>
         <div class="detail-col">
           出厂批次: {{batchNo}}
@@ -50,12 +50,6 @@
           状态:{{status}}
         </div>
       </div>
-			<el-row class="line-height margin-top" v-if="beeBoxShowAlert">
-        <el-col :span="24">
-          <el-alert :title="text" :type="showStatus==='wrong'?'error':'success'">
-          </el-alert>
-        </el-col>
-      </el-row>
     </div>
     <div class="chart-box">
       <div class="section-title">
@@ -108,33 +102,10 @@
         </div>
       </div>
       <div class="id-select">
-        <id-select @change="idSelectSearch"></id-select>
+        <id-select @idSelectSearch="idSelectSearch"></id-select>
       </div>
     </div>
   </div>
-  <!-- <div class="hive-left">
-
-    <div class="block">
-      <span class="demonstration">选择时间</span>
-      <el-date-picker v-model="date" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-      </el-date-picker>
-      <el-button type="primary" icon="el-icon-search" @click="foldsearch">搜索</el-button>
-    </div>
-    <div class="hive-foldline">
-
-      <fold refs="fold"></fold>
-    </div>
-
-      <div class="hive-pie">
-        <echartspie ref="hive"></echartspie>
-      </div>
-      <div>
-        <el-input placeholder="请输入蜂箱ID" v-model="hive_like_id">
-          <i slot="prefix" class="el-input__icon el-icon-search"></i>
-        </el-input>
-      </div>
-    </div>
-  </div> -->
 </div>
 </template>
 
@@ -145,6 +116,15 @@ import fold from './fold.vue';
 import moment from 'moment';
 import ChangebleInput from '../../baseCom/ChangebleInput';
 import IdSelect from '../../baseCom/IdSelect';
+let timer;
+let sensorDataId;
+let temperature = [];
+let humidity = [];
+let gravity = [];
+let airPressure = [];
+let battery = [];
+let date = [];
+
 export default {
 	components: {
 		echartspie,
@@ -163,7 +143,7 @@ export default {
 			protectionNum: '',
 			totalBeeBoxNum: '',
 			date: '',
-			BeeBoxId: '',
+			beeBoxNo: '',
 			lat: '',
 			lng: '',
 			batchNo: '',
@@ -171,59 +151,48 @@ export default {
 			productionDate: '',
 			status: '',
 			id: '',
-			text: '',
-			showStatus: '',
 		};
 	},
 	created: function() {
 		this.getHiveList();
+		// setInterval(this.getHiveList, 5000);
+		// clearInterval(timer)
 	},
 
 	methods: {
 		// 点击table中的行
-		slectThisRow(boxId) {
-			this.BeeBoxId = boxId;
-			this.info_search(boxId);
-			this.clickBoxId(boxId);
-		},
-
-		// 返回单个box的信息
-		idChange(boxId) {
-			let _this = this;
-			let result = post('/getBeeBoxSensorDate', { beeBoxId: boxId });
-			result.then(res => {
-				let data = res.data.data;
-				if (res.data.responseCode === '000000') {
-					_this.batchNo = data.batchNo;
-					_this.manufacturer = data.manufacturer;
-					_this.productionDate = date.productionDate;
-				}
-			});
+		slectThisRow(beeBoxNo) {
+			console.log(12222, beeBoxNo);
+			this.beeBoxNo = beeBoxNo;
+			this.info_search(beeBoxNo);
+			this.clickBoxId(beeBoxNo);
 		},
 
 		// 日期搜索时，获取相关数据，关闭定时器，必须先选择table中某一行
 		dateChange(date) {
 			//时间选择
-			// console.log(1111, date, this.BeeBoxId);
+			console.log(1112, timer);
+			clearInterval(timer);
+			console.log(11123, timer);
 			let _this = this;
 			let beginDate = new Date(date[0]).getTime();
 			let endDate = new Date(date[1]).getTime();
-			let BeeBoxId = _this.BeeBoxId;
-			console.log(beginDate, endDate, BeeBoxId);
+			let beeBoxNo = _this.beeBoxNo;
+			console.log(beginDate, endDate, beeBoxNo);
 			let options = {
 				beginDate: beginDate,
 				endDate: endDate,
-				boxId: BeeBoxId,
+				beeBoxNo: beeBoxNo,
 			};
 			console.log(1212, options);
+			temperature = [];
+			humidity = [];
+			gravity = [];
+			airPressure = [];
+			battery = [];
+			date = [];
 			let result = post('/getChartSensorData', options);
 			result.then(function(res) {
-				let temperature = [];
-				let humidity = [];
-				let gravity = [];
-				let airPressure = [];
-				let battery = [];
-				let date = [];
 				if (res.data.responseCode === '000000') {
 					let data = res.data.data;
 					for (let d of data) {
@@ -232,7 +201,7 @@ export default {
 						gravity.push(d.gravity);
 						airPressure.push(d.airPressure);
 						battery.push(d.battery);
-						date.push(moment(data.createDate).format('YYYY-MM-DD hh:mm'));
+						date.push(moment(d.createDate).format('YYYY-MM-DD hh:mm'));
 					}
 					let obj = {
 						temperature,
@@ -249,7 +218,8 @@ export default {
 		},
 
 		// 输入蜂箱ID，获取蜂箱信息
-		info_search(boxId) {
+		info_search(beeBoxNo) {
+			console.log(11111234, beeBoxNo);
 			let _this = this;
 			_this.lat = '';
 			_this.lng = '';
@@ -258,29 +228,30 @@ export default {
 			_this.productionDate = '';
 			_this.status = '';
 			let result = post('/getBeeBox', {
-				beeBoxId: boxId,
+				beeBoxNo: beeBoxNo,
 			});
 			result.then(function(res) {
 				console.log(123456, res);
 				if (res.data.responseCode === '000000') {
 					let data = res.data.data;
 					if (data) {
-						_this.boxId = data.boxId;
-						_this.batchNo = data.batchNo;
-						_this.manufacturer = data.manufacturer;
-						_this.productionDate = moment(data.productionDate).format('YYYY-MM-DD');
+						_this.beeBoxNo = data.beeBoxNo ? data.beeBoxNo : '';
+						_this.batchNo = data.batchNo ? data.batchNo : '';
+						_this.manufacturer = data.manufacturer ? data.manufacturer : '';
+						_this.productionDate = data.productionDate
+							? moment(data.productionDate).format('YYYY-MM-DD')
+							: '';
 						if (data.status === 0) _this.status = '正在运行';
 						else if (data.status === 2) _this.status = '异常';
 						else if (data.status === 3) _this.status = '离线';
+						else _this.status = '';
 						_this.lat = data.lat;
 						_this.lng = data.lng;
 					} else {
-						_this.beeBoxShowAlert = true;
-						_this.showStatus = 'wrong';
-						_this.text = '该蜂箱不存在';
-						setTimeout(function() {
-							_this.beeBoxShowAlert = false;
-						}, 1000);
+						_this.$message({
+							message: '该蜂箱不存在',
+							type: 'warning',
+						});
 					}
 				}
 			});
@@ -321,9 +292,9 @@ export default {
 					console.log(1222222, data);
 					_this.hiveList = data;
 					if (data.length > 0) {
-						_this.BeeBoxId = data[0].boxId;
+						_this.beeBoxNo = data[0].beeBoxNo;
 						// 默认第一条蜂箱信息
-						_this.info_search(_this.BeeBoxId);
+						_this.info_search(_this.beeBoxNo);
 					}
 				}
 			});
@@ -331,27 +302,58 @@ export default {
 
 		idSelectSearch(id) {
 			console.log(11119, id);
-			let result = post('/beeBoxSearch', {
-				keyword: '1',
-			});
-			result.then(res => {
-				console.log(result);
-			});
+			this.info_search(id);
+			this.clickBoxId(id);
 		},
 		// 点击table中的某一行开始轮询获取相关数据，放入折线图中,开始搜索后则关闭该轮询
 		clickBoxId() {
 			let _this = this;
-			let intervalTime = setInterval(function() {
-				let result = post('/getBeeBoxSensorDate', {
-					beeBoxId: _this.BeeBoxId,
-				});
+			console.log(123, _this.beeBoxNo);
+			sensorDataId = '';
+			temperature = [];
+			humidity = [];
+			gravity = [];
+			airPressure = [];
+			battery = [];
+			date = [];
+			timer = setInterval(() => {
+				let result;
+				if (!sensorDataId) {
+					result = post('/getBeeBoxSensorData', {
+						beeBoxNo: _this.beeBoxNo,
+					});
+				} else {
+					result = post('/getBeeBoxSensorData', {
+						beeBoxNo: _this.beeBoxNo,
+						sensorDataId: sensorDataId,
+					});
+				}
 				result.then(res => {
-					if(res.data.responseCode === '000000'){
-
+					if (res.data.responseCode === '000000') {
+						console.log(99999, res.data);
+						let d = res.data.data;
+						if (d) {
+							sensorDataId = d.id;
+							temperature.push(d.temperature);
+							humidity.push(d.humidity);
+							gravity.push(d.gravity);
+							airPressure.push(d.airPressure);
+							battery.push(d.battery);
+							date.push(moment(d.createDate).format('YYYY-MM-DD hh:mm'));
+							let obj = {
+								temperature,
+								humidity,
+								gravity,
+								airPressure,
+								battery,
+								date,
+							};
+							console.log(1111111, obj);
+							_this.$refs.fool.drawFoldLine(obj);
+						}
 					}
 				});
 			}, 1000);
-			clearInterval(intervalTime);
 		},
 	},
 };

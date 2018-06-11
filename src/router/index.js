@@ -5,7 +5,7 @@ import HiveMap from '@/Containers/Map'
 import content from '../components/content/index.vue';
 import BeeKeeperInfo from '@/Containers/BeeKeeper';
 import UpdatePwd from '@/Containers/BeeKeeper/updatepwd.vue';
-
+import FeedBack from '@/Containers/BeeKeeper/feedback.vue';
 Vue.use(Router)
 
 export default new Router({
@@ -33,6 +33,10 @@ export default new Router({
           path: '/beekeeper/changepwd',
           component: UpdatePwd
         },
+        {
+          path: '/beekeeper/feedback',
+          component: FeedBack
+        }
       ]
     }
   ]

@@ -20,19 +20,22 @@
        <router-link to="/beekeeper/info"><i class="iconfont icon-user"></i>{{account}}</router-link>
     </span>
     <span>
-        <router-link to="/beekeeper/changepwd">修改</router-link>
+        <router-link to="/beekeeper/changepwd">修改密码</router-link>
+    </span>
+		<span>
+        <router-link to="/beekeeper/feedback">意见反馈</router-link>
     </span>
     <span @click="logout">
       退出
-
     </span>
 
   </div>
 </div>
 </template>
 <script>
-import { HIVE_API_TOKEN, HIVE_USER_NAME ,IS_LOGIN} from '../../common/localStorageKey';
+import { HIVE_API_TOKEN, HIVE_USER_NAME, IS_LOGIN } from '../../common/localStorageKey';
 import LocalStore from '../../common/localStore';
+import { get, post } from '../../common/post.js';
 export default {
 	name: '',
 	data: () => ({
@@ -45,15 +48,21 @@ export default {
 			this.$emit('change-collapse', this.collapse);
 		},
 		logout() {
-			LocalStore.setItem(HIVE_API_TOKEN, '');
-		//	LocalStore.setItem(HIVE_USER_NAME, '');
-      LocalStore.setItem(IS_LOGIN, '');
-			setTimeout(() => {
-				this.$emit('logout');
-			}, 200);
-      this.$router.push({
-        path:'/'
-      })
+			let result = get('/logout');
+			result.then(res => {
+				console.log(res);
+				if (res.data.responseCode === '000000') {
+					LocalStore.setItem(HIVE_API_TOKEN, '');
+					//	LocalStore.setItem(HIVE_USER_NAME, '');
+					LocalStore.setItem(IS_LOGIN, '');
+					setTimeout(() => {
+						this.$emit('logout');
+					}, 200);
+					this.$router.push({
+						path: '/',
+					});
+				}
+			});
 		},
 		handleSelect(key, keyPath) {
 			console.log(key, keyPath);
@@ -70,14 +79,14 @@ export default {
 .header {
 	width: 100%;
 	height: 100%;
-	background-color: rgb(0,0,0);
+	background-color: rgb(0, 0, 0);
 }
-.el-submenu__title,.is-opened{
-    color:white !important;
+.el-submenu__title,
+.is-opened {
+	color: white !important;
 }
 
-.el-menu-demo{
-
+.el-menu-demo {
 }
 
 .logo {
@@ -105,24 +114,25 @@ export default {
 .collapse-btn i {
 	font-size: 25px;
 }
-.user-control{
-  position: absolute;
-  color: white;
-  height: 60px;
-  line-height: 60px;
-  right: 30px;
-  font-size: 14px;
+.user-control {
+	position: absolute;
+	color: white;
+	height: 60px;
+	line-height: 60px;
+	right: 30px;
+	font-size: 14px;
 }
-.user-control span{
-  margin-right: 20px;
+.user-control span {
+	margin-right: 20px;
 }
-.user-control span a{
-  color: white;
-  font-size: 14px;
-  text-decoration: none;
+.user-control span a {
+	color: white;
+	font-size: 14px;
+	text-decoration: none;
 }
-.user-control span a:hover,.user-control span:hover{
-  color:#f8b62c;
-  cursor: pointer;
+.user-control span a:hover,
+.user-control span:hover {
+	color: #f8b62c;
+	cursor: pointer;
 }
 </style>
