@@ -225,7 +225,6 @@ export default {
 				}
 			});
 		},
-
 		//查询
 		idSelectSearch(beeBoxNo) {
 			this.info_search(beeBoxNo);

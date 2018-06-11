@@ -124,7 +124,6 @@ let gravity = [];
 let airPressure = [];
 let battery = [];
 let date = [];
-
 export default {
 	components: {
 		echartspie,
@@ -356,6 +355,7 @@ export default {
 			}, 1000);
 		},
 	},
+
 };
 </script>
 

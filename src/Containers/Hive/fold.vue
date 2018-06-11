@@ -15,6 +15,7 @@ export default {
 	// 	this.drawFoldLine();
 	// },
 	methods: {
+
 		drawFoldLine(obj) {
 			// 基于准备好的dom，初始化echarts实例
 			let foldChart = echarts.init(document.getElementById('foldChart'));

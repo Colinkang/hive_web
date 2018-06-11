@@ -31,6 +31,7 @@ export default {
 				this.selectId = id;
 				this.$emit('idSelectSearch', id);
 			}
+
 		},
 		getList(e) {
 			console.log(e.target.value);
