@@ -117,6 +117,7 @@ import moment from 'moment';
 import ChangebleInput from '../../baseCom/ChangebleInput';
 import IdSelect from '../../baseCom/IdSelect';
 let timer;
+let hiveTimer;
 let sensorDataId;
 let temperature = [];
 let humidity = [];
@@ -154,7 +155,7 @@ export default {
 	},
 	created: function() {
 		this.getHiveList();
-		// setInterval(this.getHiveList, 5000);
+		hiveTimer = setInterval(this.getHiveList, 5000);
 		// clearInterval(timer)
 	},
 
@@ -258,43 +259,50 @@ export default {
 		// 获取初始页面的数据table，以及策略保护和非策略保护数据
 		getHiveList() {
 			let _this = this;
+
 			let result = get('/getAllBeeBoxSensorData', null);
-			result.then(function(res) {
-				console.log(123334, res);
+			result.then(res => {
 				if (res.data.responseCode === '000000') {
 					let data = res.data.data.latestSensorData;
 					let stat = res.data.data;
 					// 总览 饼图
-					_this.abnormalBeeBoxNum = stat.abnormalBeeBoxNum;
-					_this.noProtectionNum = stat.noProtectionNum;
-					_this.normalBeeBoxNum = stat.normalBeeBoxNum;
-					_this.offLineBeeBoxNum = stat.offLineBeeBoxNum;
-					_this.protectionNum = stat.protectionNum;
-					_this.totalBeeBoxNum = stat.totalBeeBoxNum;
-					let obj = {
-						abnormalBeeBoxNum: stat.abnormalBeeBoxNum,
-						noProtectionNum: stat.noProtectionNum,
-						normalBeeBoxNum: stat.normalBeeBoxNum,
-						offLineBeeBoxNum: stat.offLineBeeBoxNum,
-						protectionNum: stat.protectionNum,
-						totalBeeBoxNum: stat.totalBeeBoxNum,
-					};
-					// 画扇形图
-					_this.$refs.hive.drawLine(obj);
+					//有时候数据为空值，需要改变东西
+					if (stat) {
+						_this.abnormalBeeBoxNum = stat.abnormalBeeBoxNum;
+						_this.noProtectionNum = stat.noProtectionNum;
+						_this.normalBeeBoxNum = stat.normalBeeBoxNum;
+						_this.offLineBeeBoxNum = stat.offLineBeeBoxNum;
+						_this.protectionNum = stat.protectionNum;
+						_this.totalBeeBoxNum = stat.totalBeeBoxNum;
+						let obj = {
+							abnormalBeeBoxNum: stat.abnormalBeeBoxNum,
+							noProtectionNum: stat.noProtectionNum,
+							normalBeeBoxNum: stat.normalBeeBoxNum,
+							offLineBeeBoxNum: stat.offLineBeeBoxNum,
+							protectionNum: stat.protectionNum,
+							totalBeeBoxNum: stat.totalBeeBoxNum,
+						};
+						console.log(111111, obj);
+						// 画扇形图
+						_this.$refs.hive.drawLine(obj);
 
-					// 将值赋值给列表
-					for (let obj of data) {
-						if (obj.status === 0) obj.status = '正在运行';
-						else if (obj.status === 2) obj.status = '异常';
-						else if (obj.status === 3) obj.status = '离线';
+						// 将值赋值给列表
+						for (let obj of data) {
+							if (obj.status === 0) obj.status = '正在运行';
+							else if (obj.status === 2) obj.status = '异常';
+							else if (obj.status === 3) obj.status = '离线';
+						}
+						console.log(1222222, data);
+						_this.hiveList = [];
+						_this.hiveList = _this.hiveList.concat(data);
 					}
-					console.log(1222222, data);
-					_this.hiveList = data;
-					if (data.length > 0) {
-						_this.beeBoxNo = data[0].beeBoxNo;
-						// 默认第一条蜂箱信息
-						_this.info_search(_this.beeBoxNo);
-					}
+
+					//因为蜂箱数据时动态显示的，如果给定默认值，会一直刷新到第一条数据
+					// if (data.length > 0) {
+					// 	_this.beeBoxNo = data[0].beeBoxNo;
+					// 	// 默认第一条蜂箱信息
+					// 	_this.info_search(_this.beeBoxNo);
+					// }
 				}
 			});
 		},
@@ -315,6 +323,15 @@ export default {
 			airPressure = [];
 			battery = [];
 			date = [];
+			let obj = {
+				temperature,
+				humidity,
+				gravity,
+				airPressure,
+				battery,
+				date,
+			};
+			_this.$refs.fool.drawFoldLine(obj);
 			timer = setInterval(() => {
 				let result;
 				if (!sensorDataId) {
@@ -355,7 +372,6 @@ export default {
 			}, 1000);
 		},
 	},
-
 };
 </script>
 
