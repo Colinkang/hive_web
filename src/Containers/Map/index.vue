@@ -131,6 +131,12 @@ export default {
 	},
 	created() {
 		this.getRealData();
+		console.log(12390);
+	},
+	destroyed() {
+		console.log(888888);
+		// clearInterval(hiveTimer);
+		clearInterval(timer);
 	},
 	methods: {
 		// 获取数据显示在地图上经纬度

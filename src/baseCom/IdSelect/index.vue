@@ -31,7 +31,6 @@ export default {
 				this.selectId = id;
 				this.$emit('idSelectSearch', id);
 			}
-
 		},
 		getList(e) {
 			console.log(e.target.value);
@@ -43,12 +42,10 @@ export default {
 			result.then(res => {
 				console.log(34, res);
 				if (res.data.responseCode === '000000') {
-					console.log(9999, res.data.data);
-					if (res.data.responseCode === '000000') {
-						let data = res.data.data;
-						for (let d of data) {
-							this.list.push(d.beeBoxNo);
-						}
+					let data = res.data.data;
+					this.list = [];
+					for (let d of data) {
+						this.list.push(d.beeBoxNo);
 					}
 				}
 			});

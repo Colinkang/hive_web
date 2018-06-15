@@ -158,6 +158,11 @@ export default {
 		hiveTimer = setInterval(this.getHiveList, 5000);
 		// clearInterval(timer)
 	},
+	destroyed(){
+		console.log(1129192)
+		clearInterval(hiveTimer);
+		clearInterval(timer);
+	},
 
 	methods: {
 		// 点击table中的行
