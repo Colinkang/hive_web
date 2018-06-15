@@ -52,7 +52,7 @@
           </el-col>
 
         </el-row>
-    
+
         <el-row class="form-row">
           <el-col :span="4">
             <el-button type="primary" @click="save">确认修改</el-button>
@@ -173,7 +173,7 @@ export default {
 .detail-box {
 	width: 80%;
 	height: 700px;
-	border: 1px solid rgb(222, 176, 50);
+	border: 1px solid rgb(255, 167, 39);
 }
 .section-top {
 	height: 250px;

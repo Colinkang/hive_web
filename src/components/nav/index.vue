@@ -1,6 +1,6 @@
 <template>
 <div class="nav">
-  <el-menu default-active="0" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" background-color="#404040" text-color="rgba(105, 105, 106)" a ctive-text-color="rgb(105, 105, 106)" :collapse="collapse" :router="true">
+  <el-menu :default-active="index" class="el-menu-vertical-demo" @select="select" @open="handleOpen" @close="handleClose" background-color="#404040" text-color="rgba(105, 105, 106)" a ctive-text-color="rgb(105, 105, 106)" :collapse="collapse" :router="true">
     <el-menu-item index="0" route="/hive/map">
       <span class="nav-text">
         <i class="iconfont icon-map"></i>
@@ -32,14 +32,19 @@
 </div>
 </template>
 <script>
+import { HIVE_NAV_INDEX} from '../../common/localStorageKey';
+import LocalStore from '../../common/localStore';
 export default {
   props: {
     collapse: {
       type: Boolean,
-      default: false
+      default: false,
+
     }
   },
-  data: () => ({}),
+  data: () => ({
+      index: '0'
+  }),
   methods: {
     toRoutePage(route) {
       this.$router.push({
@@ -51,7 +56,16 @@ export default {
     },
     handleClose(key, keyPath) {
       //console.log(key, keyPath);
+    },
+    select(e) {
+      this.index = e
+      LocalStore.setItem(HIVE_NAV_INDEX, e)
     }
+
+  },
+  mounted(){
+    let index  = LocalStore.getItem(HIVE_NAV_INDEX)
+    this.index = index
   }
 };
 </script>
@@ -80,8 +94,8 @@ export default {
 }
 
 .el-menu-item {
-  height: 40px;
-  line-height: 40px;
+  height: 50px;
+  line-height: 50px;
 }
 
 .is-active::before {

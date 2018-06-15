@@ -46,6 +46,7 @@ import {
 	IS_LOGIN,
 	HIVE_USER_PASSWORD,
 	HIVE_REMENBER_USERNAME,
+  HIVE_NAV_INDEX
 } from '../../common/localStorageKey';
 import LocalStore from '../../common/localStore';
 import updatepwd from './updatepwd';
@@ -86,6 +87,7 @@ export default {
 						LocalStore.setItem(HIVE_API_TOKEN, res.data.data.authToken);
 						LocalStore.setItem(HIVE_USER_NAME, this.account);
 						LocalStore.setItem(HIVE_REMENBER_USERNAME, this.checked);
+            LocalStore.setItem(HIVE_NAV_INDEX, '0');
 						if (this.checked) {
 							LocalStore.setItem(HIVE_USER_PASSWORD, this.password);
 						}
