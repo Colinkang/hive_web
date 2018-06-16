@@ -82,7 +82,7 @@
             电量
           </div>
           <div class="data-update-row-value">
-             {{real.battery}}
+             {{real.battery}}%
           </div>
         </div>
       </div>
@@ -95,7 +95,10 @@
         <i class="iconfont icon-cry" style="font-size:20px;"></i>异常
       </div>
       <div class="face" v-else-if="status===0" >
-        <i class="iconfont icon-smile" style="font-size:20px;"></i>正常
+        <i class="iconfont icon-smile" style="font-size:20px;"></i>正在运行
+      </div>
+			<div class="face" v-else-if="status===1" >
+        <i class="iconfont icon-smile" style="font-size:20px;"></i>正在运行
       </div>
 			 <div class="face" v-else>
         <i class="iconfont icon-cry" style="font-size:20px;"></i>离线

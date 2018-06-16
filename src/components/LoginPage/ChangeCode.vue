@@ -21,7 +21,7 @@
             新登录密码
           </el-col>
           <el-col :span="5">
-            <el-input size="mini" v-model.trim="fix.newPassword"  placeholder="请输入新登录密码"></el-input>
+            <el-input size="mini" type="password" v-model.trim="fix.newPassword"  placeholder="请输入新登录密码"></el-input>
           </el-col>
 
         </el-row>
@@ -30,7 +30,7 @@
             确认新登录密码
           </el-col>
           <el-col :span="5">
-            <el-input size="mini" v-model.trim="fix.newPasswordConfirm"  placeholder="再次输入登录密码"></el-input>
+            <el-input size="mini" type="password" v-model.trim="fix.newPasswordConfirm"  placeholder="再次输入登录密码"></el-input>
           </el-col>
 
         </el-row>

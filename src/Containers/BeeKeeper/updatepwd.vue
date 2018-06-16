@@ -12,7 +12,7 @@
             新登录密码
           </el-col>
           <el-col :span="5">
-            <el-input size="mini" v-model.trim="fix.newPassword"  placeholder="请输入内容"></el-input>
+            <el-input size="mini" type="password" v-model.trim="fix.newPassword"  placeholder="请输入内容"></el-input>
           </el-col>
 
         </el-row>
@@ -21,7 +21,7 @@
             确认新密码
           </el-col>
           <el-col :span="5">
-            <el-input size="mini" v-model.trim="fix.newPasswordConfirm"  placeholder="请输入内容"></el-input>
+            <el-input size="mini" type="password" v-model.trim="fix.newPasswordConfirm"  placeholder="请输入内容"></el-input>
           </el-col>
 
         </el-row>
@@ -43,28 +43,6 @@
           </el-col>
 
         </el-row>
-        <!-- <el-row class="form-row">
-          <el-col :span="3" >
-            联系电话
-          </el-col>
-          <el-col :span="5">
-            1234567876543
-          </el-col>
-          <el-col :span="4">
-            <span class="sent-code">修改</span>
-          </el-col>
-
-
-        </el-row> -->
-        <!-- <el-row class="form-row">
-          <el-col :span="3">
-            组织
-          </el-col>
-          <el-col :span="5">
-            组织
-          </el-col>
-
-        </el-row> -->
         <el-row class="form-row">
           <el-col :span="4">
             <el-button type="primary" @click="save">确认修改</el-button>
@@ -105,6 +83,12 @@ export default {
 	}),
 	methods: {
 		sendCode() {
+			if (!this.fix.mobile) {
+				this.$message({
+					message: '手机号码不能为空',
+					type: 'warning',
+				});
+			}
 			let result = post('/SMSService', {
 				mobile: this.fix.mobile,
 				userName: localStore.getItem(HIVE_USER_NAME),
