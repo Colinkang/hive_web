@@ -133,7 +133,7 @@ export default {
     return {
       points: [],
       beeBoxNo: '1',
-      zoom: 9,
+      zoom: 11,
       lat: '',
       lng: '',
       real: {},
