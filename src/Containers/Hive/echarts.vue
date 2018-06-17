@@ -30,7 +30,7 @@ export default {
 						type: 'pie',
 						selectedMode: 'single',
 						radius: [0, '30%'],
-
+            center: ['50%', '50%'],
 						label: {
 							normal: {
 								position: 'inner',
@@ -50,6 +50,7 @@ export default {
 						name: '总量',
 						type: 'pie',
 						radius: ['40%', '55%'],
+            center: ['50%', '53%'],
 						label: {
 							normal: {
 								// shadowBlur:3,

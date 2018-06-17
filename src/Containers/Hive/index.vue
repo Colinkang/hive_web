@@ -11,7 +11,7 @@
         <th>状态</th>
         <th>电量</th>
       </tr>
-      <tr v-for="(item) in hiveList" :key='item.id' @click="slectThisRow(item.beeBoxNo)">
+      <tr v-for="(item,index) in hiveList" :key='item.id' @click="slectThisRow(item.beeBoxNo,index)" :class="selectIndex===index?'selected':''">
         <td>{{item.beeBoxNo?item.beeBoxNo:'-'}}</td>
         <td>{{item.temperature?item.temperature:'-'}}</td>
         <td>{{item.humidity?item.humidity:'-'}}</td>
@@ -151,6 +151,7 @@ export default {
 			productionDate: '',
 			status: '',
 			id: '',
+      selectIndex:0
 		};
 	},
 	created: function() {
@@ -159,26 +160,27 @@ export default {
 		// clearInterval(timer)
 	},
 	destroyed(){
-		console.log(1129192)
+		//console.log(1129192)
 		clearInterval(hiveTimer);
 		clearInterval(timer);
 	},
 
 	methods: {
 		// 点击table中的行
-		slectThisRow(beeBoxNo) {
-			console.log(12222, beeBoxNo);
+		slectThisRow(beeBoxNo,index) {
+			//console.log(12222, beeBoxNo);
 			this.beeBoxNo = beeBoxNo;
 			this.info_search(beeBoxNo);
 			this.clickBoxId(beeBoxNo);
+      this.selectIndex=index
 		},
 
 		// 日期搜索时，获取相关数据，关闭定时器，必须先选择table中某一行
 		dateChange(date) {
 			//时间选择
-			console.log(1112, timer);
+			//console.log(1112, timer);
 			clearInterval(timer);
-			console.log(11123, timer);
+			//console.log(11123, timer);
 			let _this = this;
 			let beginDate = new Date(date[0]).getTime();
 			let endDate = new Date(date[1]).getTime();
@@ -216,7 +218,7 @@ export default {
 						battery,
 						date,
 					};
-					console.log(1111111, obj);
+					//sconsole.log(1111111, obj);
 					_this.$refs.fool.drawFoldLine(obj);
 				}
 			});
@@ -224,7 +226,7 @@ export default {
 
 		// 输入蜂箱ID，获取蜂箱信息
 		info_search(beeBoxNo) {
-			console.log(11111234, beeBoxNo);
+			//console.log(11111234, beeBoxNo);
 			let _this = this;
 			_this.lat = '';
 			_this.lng = '';
@@ -521,5 +523,8 @@ table tr th {
 	text-align: left;
 	text-indent: 20px;
 	width: 35%;
+}
+.selected{
+  background: rgb(153, 206, 232)
 }
 </style>

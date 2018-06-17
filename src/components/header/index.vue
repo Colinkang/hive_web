@@ -48,21 +48,13 @@ export default {
 			this.$emit('change-collapse', this.collapse);
 		},
 		logout() {
-			let result = get('/logout');
-			result.then(res => {
-				console.log(res);
-				if (res.data.responseCode === '000000') {
-					LocalStore.setItem(HIVE_API_TOKEN, '');
-					//	LocalStore.setItem(HIVE_USER_NAME, '');
-					LocalStore.setItem(IS_LOGIN, '');
-					setTimeout(() => {
-						this.$emit('logout');
-					}, 200);
-					this.$router.push({
-						path: '/',
-					});
-				}
-			});
+      LocalStore.setItem(HIVE_API_TOKEN, '');
+		//	LocalStore.setItem(HIVE_USER_NAME, '');
+      LocalStore.setItem(IS_LOGIN, '');
+			setTimeout(() => {
+				this.$emit('logout');
+        LocalStore.setItem(HIVE_NAV_INDEX,'0')
+			}, 200);
 		},
 		handleSelect(key, keyPath) {
 			console.log(key, keyPath);
