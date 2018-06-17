@@ -49,7 +49,6 @@ import {
   HIVE_NAV_INDEX
 } from '../../common/localStorageKey';
 import LocalStore from '../../common/localStore';
-import updatepwd from './updatepwd';
 export default {
 	name: '',
 	data: () => ({
@@ -62,7 +61,6 @@ export default {
 		showChangeCode: false,
 	}),
 	components: {
-		updatepwd,
 		ChangeCode,
 	},
 	methods: {
