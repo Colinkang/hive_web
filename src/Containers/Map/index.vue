@@ -146,7 +146,7 @@ export default {
 			centerlng: '',
 		};
 	},
-	created() {
+	mounted() {
 		// this.firstGetData();
 		this.getRealData();
 		console.log(12390, this.centerlng, this.centerlat, this.lng, this.lat);
@@ -205,9 +205,13 @@ export default {
 		},
 		//第一次获得蜂箱数据
 		firstGetData() {
-			let result;
+			// console.log(222);
 			let _this = this;
-			if (!_this.beeBoxNo) return;
+			// if (!_this.beeBoxNo) {
+			// 	console.log(1111);
+			// 	return;
+			// }
+			let result;
 			console.log(1, sensorDataId, _this.beeBoxNo);
 			if (!sensorDataId) {
 				result = post('/getBeeBoxSensorData', {
@@ -224,6 +228,7 @@ export default {
 				let data = res.data.data;
 				console.log(1234, res.data, data);
 				if (res.data.responseCode === '000000' && data) {
+					_this.ok = true;
 					_this.$set(_this.real, 'temperature', data.temperature);
 					_this.$set(_this.real, 'humidity', data.humidity);
 					_this.$set(_this.real, 'gravity', data.gravity);
@@ -239,36 +244,14 @@ export default {
 		getRealData() {
 			let _this = this;
 			sensorDataId = '';
-			console.log(33333, sensorDataId);
+			// _this.ok = false;
+			// _this.lng = 121.48;
+			// _this.lat = 31.22;
+			console.log(33333, sensorDataId, _this.beeBoxNo);
 			clearInterval(timer);
+			_this.firstGetData();
 			timer = setInterval(() => {
-				let result;
-				console.log(1, sensorDataId, _this.beeBoxNo);
-				if (!sensorDataId) {
-					result = post('/getBeeBoxSensorData', {
-						beeBoxNo: _this.beeBoxNo,
-					});
-				} else {
-					result = post('/getBeeBoxSensorData', {
-						beeBoxNo: _this.beeBoxNo,
-						sensorDataId: sensorDataId,
-					});
-				}
-				console.log(345, sensorDataId);
-				result.then(function(res) {
-					let data = res.data.data;
-					console.log(1234, res.data, data);
-					if (res.data.responseCode === '000000' && data) {
-						_this.$set(_this.real, 'temperature', data.temperature);
-						_this.$set(_this.real, 'humidity', data.humidity);
-						_this.$set(_this.real, 'gravity', data.gravity);
-						_this.$set(_this.real, 'airPressure', data.airPressure);
-						_this.$set(_this.real, 'battery', data.battery);
-						_this.status = data.status;
-						sensorDataId = data.id;
-					}
-					console.log(99999, _this.real);
-				});
+				_this.firstGetData();
 			}, 5000);
 		},
 		// 通过蜂箱ID搜索数据  先把原有数据清空
@@ -285,8 +268,8 @@ export default {
 				console.log(123456, res);
 				if (res.data.responseCode === '000000') {
 					let data = res.data.data;
-					_this.ok = true;
 					if (data) {
+						_this.ok = true;
 						_this.beeBoxNo = data.beeBoxNo ? data.beeBoxNo : '';
 						_this.lat = data.lat;
 						_this.lng = data.lng;

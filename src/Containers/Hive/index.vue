@@ -169,6 +169,7 @@ export default {
 		// 点击table中的行
 		slectThisRow(beeBoxNo) {
 			//console.log(12222, beeBoxNo);
+			clearInterval(timer);
 			this.beeBoxNo = beeBoxNo;
 			this.info_search(beeBoxNo);
 			this.clickBoxId(beeBoxNo);

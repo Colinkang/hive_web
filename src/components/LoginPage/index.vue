@@ -92,10 +92,11 @@ export default {
 							this.$router.push({
 								path: '/beekeeper/changepwd',
 							});
+						} else {
+							this.$router.push({
+								path: '/hive/map',
+							});
 						}
-						this.$router.push({
-							path: '/hive/map',
-						});
 						setTimeout(() => {
 							this.$emit('login-success');
 						}, 1000);
