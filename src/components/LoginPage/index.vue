@@ -77,7 +77,7 @@ export default {
 				});
 				result.then(res => {
 					this.showAlert = true;
-					console.log(123456, res.data);
+					//console.log(123456, res.data);
 					if (res.data.responseCode === '000000') {
 						this.status = 'success';
 						this.text = '验证成功，欢迎登陆';
@@ -127,6 +127,7 @@ export default {
 	background-color: rgb(94, 95, 95);
 	width: 100%;
 	height: 100%;
+  overflow: scroll;
 	top: 0;
 }
 

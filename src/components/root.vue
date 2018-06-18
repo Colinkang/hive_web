@@ -23,6 +23,7 @@
 </div>
 </template>
 <script>
+let timer;
 import HHeader from '../components/header/index.vue';
 import CContent from '../components/content/index';
 import NNav from '../components/nav/index';
@@ -32,6 +33,9 @@ import {
   IS_LOGIN
 } from '../common/localStorageKey';
 import LocalStore from '../common/localStore';
+import {
+  get
+} from '../common/post';
 import {
   post
 } from '../common/post';
@@ -56,26 +60,33 @@ export default {
     },
     logout() {
       this.isLogin = false;
+    },
+    checkedLoginStill(){
+      let result = get('/checkTokenExpiration', {})
+      result.then((res) => {
+        if (res.data.responseCode==='000000') {
+          console.log(res.data.responseCode)
+          this.isLogin = true;
+          timer =setTimeout(()=>{
+            this.checkedLoginStill()
+          },5000)
+        } else {
+          this.isLogin = false
+          LocalStore.setItem(IS_LOGIN,false)
+          LocalStore.setItem(HIVE_API_TOKEN,'')
+          this.$router.push({
+            path: '/'
+          })
+        }
+      })
     }
   },
   mounted() {
-    console.log(444)
-    //检查登录状态
-    // let result = post('/manager/token');
-    // result.then((res) => {
-    //   if (res.data.code === '1004') {
-    //     this.isLogin = false
-    //   } else {
-    //     this.isLogin=true
-    //   }
-    // })
-    let isLogin = LocalStore.getItem(IS_LOGIN)
-    this.isLogin = isLogin;
-    if (!isLogin) {
-      this.$router.push({
-        path: '/'
-      })
-    }
+    this.checkedLoginStill()
+  },
+  beforeDestroy() {
+    //do something before destroying vue instance
+    clearInterval(timer)
   }
 }
 </script>
