@@ -198,6 +198,7 @@ export default {
 			date = [];
 			let result = post('/getChartSensorData', options);
 			result.then(function(res) {
+				console.log(temperature);
 				if (res.data.responseCode === '000000') {
 					let data = res.data.data;
 					for (let d of data) {
