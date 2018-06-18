@@ -122,7 +122,7 @@ export default {
 	background: linear-gradient(top, #524b49, #3d3a36);
 	border-top: 2px solid #2d2a26;
 	left: 0;
-	color: #ed9e10;
+	color: #f5f2ee;
 }
 .list-box ul li:hover {
 	background: linear-gradient(top, #ed9e10, #f7bf14);

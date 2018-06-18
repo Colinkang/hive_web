@@ -47,16 +47,10 @@
           <el-col :span="4">
             <el-button type="primary" @click="save">确认修改</el-button>
           </el-col>
-          <el-col :span="4">
-            <el-button type="default" @click="hive">取消</el-button>
-          </el-col>
+          <!-- <el-col :span="4">
+            <el-button type="default" @click="cancel">取消</el-button>
+          </el-col> -->
         </el-row>
-          <el-row class="line-height margin-top" v-if="changeCodeShowAlert">
-        <el-col :span="24">
-          <el-alert :title="text" :type="status==='wrong'?'error':'success'">
-          </el-alert>
-        </el-col>
-      </el-row>
       </div>
     </div>
 
@@ -98,8 +92,16 @@ export default {
 				console.log(1234, res);
 				if (res.data.responseCode === '000000') {
 					console.log('获取验证码成功');
-				} else {
+					this.$message({
+						message: '获取验证码成功',
+						type: 'success',
+					});
+				} else if (res.data.responseCode === '000033') {
 					// this.$message('');
+					this.$message({
+						message: '输入的手机号与预留的手机号不一致',
+						type: 'warning',
+					});
 				}
 			});
 		},
@@ -129,11 +131,10 @@ export default {
 				result.then(res => {
 					console.log(123, res);
 					if (res.data.responseCode === '000000') {
-						this.status = 'success';
-						this.text = '修改密码成功';
-						setTimeout(() => {
-							this.changeCodeShowAlert = false;
-						}, 1000);
+						this.$message({
+							message: '修改密码成功',
+							type: 'success',
+						});
 						this.fix = {
 							username: '',
 							newPassword: '',
@@ -142,18 +143,13 @@ export default {
 							code: '',
 						};
 						this.$router.back();
+					} else if (res.data.responseCode === '000034') {
+						this.$message.error('验证码错误');
 					} else {
-						this.status = 'wrong';
-						this.text = '修改密码失败';
-						setTimeout(() => {
-							this.changeCodeShowAlert = false;
-						}, 1000);
+						this.$message.error('修改密码失败');
 					}
 				});
 			}
-		},
-		hive() {
-			this.$emit('hide');
 		},
 	},
 };

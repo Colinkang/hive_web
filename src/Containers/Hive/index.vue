@@ -11,7 +11,7 @@
         <th>状态</th>
         <th>电量</th>
       </tr>
-      <tr v-for="(item,index) in hiveList" :key='item.id' @click="slectThisRow(item.beeBoxNo)" :class="beeBoxNo===item.beeBoxNo?'selected':''">
+      <tr v-for="(item,index) in hiveList" :key='index' @click="slectThisRow(item.beeBoxNo)" :class="beeBoxNo===item.beeBoxNo?'selected':''">
         <td>{{item.beeBoxNo?item.beeBoxNo:'-'}}</td>
         <td>{{item.temperature?item.temperature:'-'}}</td>
         <td>{{item.humidity?item.humidity:'-'}}</td>
@@ -30,7 +30,7 @@
       <div class="dtail-row">
         <div class="detail-col">
           蜂箱ID:
-          <changeble-input :value="beeBoxNo" @change='info_search'></changeble-input>
+          <changeble-input :value="beeBoxNo" @change='idSelectSearch'></changeble-input>
         </div>
         <div class="detail-col">
           出厂批次: {{batchNo}}
@@ -41,7 +41,7 @@
       </div>
       <div class="dtail-row">
         <div class="detail-col">
-          蜂箱定位:{{lat}},{{lng}}
+          蜂箱定位:{{lat}}, {{lng}}
         </div>
         <div class="detail-col">
           生产日期:{{productionDate}}
@@ -151,7 +151,8 @@ export default {
 			productionDate: '',
 			status: '',
 			id: '',
-      selectIndex:""
+			selectIndex: '',
+			beeBoxNoExsit: true,
 		};
 	},
 	created: function() {
@@ -159,8 +160,7 @@ export default {
 		hiveTimer = setInterval(this.getHiveList, 5000);
 		// clearInterval(timer)
 	},
-	destroyed(){
-		//console.log(1129192)
+	destroyed() {
 		clearInterval(hiveTimer);
 		clearInterval(timer);
 	},
@@ -172,7 +172,7 @@ export default {
 			this.beeBoxNo = beeBoxNo;
 			this.info_search(beeBoxNo);
 			this.clickBoxId(beeBoxNo);
-      //this.selectIndex=index
+			//this.selectIndex=index
 		},
 
 		// 日期搜索时，获取相关数据，关闭定时器，必须先选择table中某一行
@@ -191,7 +191,7 @@ export default {
 				endDate: endDate,
 				beeBoxNo: beeBoxNo,
 			};
-		//	console.log(1212, options);
+			//	console.log(1212, options);
 			temperature = [];
 			humidity = [];
 			gravity = [];
@@ -200,7 +200,7 @@ export default {
 			date = [];
 			let result = post('/getChartSensorData', options);
 			result.then(function(res) {
-				console.log(temperature);
+				console.log(1234,res);
 				if (res.data.responseCode === '000000') {
 					let data = res.data.data;
 					for (let d of data) {
@@ -249,7 +249,7 @@ export default {
 						_this.productionDate = data.productionDate
 							? moment(data.productionDate).format('YYYY-MM-DD')
 							: '';
-						if (data.status === 0) _this.status = '正在运行';
+						if (data.status === 0 || data.status === 1) _this.status = '正在运行';
 						else if (data.status === 2) _this.status = '异常';
 						else if (data.status === 3) _this.status = '离线';
 						else _this.status = '';
@@ -267,7 +267,6 @@ export default {
 		// 获取初始页面的数据table，以及策略保护和非策略保护数据
 		getHiveList() {
 			let _this = this;
-
 			let result = get('/getAllBeeBoxSensorData', null);
 			result.then(res => {
 				if (res.data.responseCode === '000000') {
@@ -296,20 +295,20 @@ export default {
 
 						// 将值赋值给列表
 						for (let obj of data) {
-							if (obj.status === 0||obj.status === 1) obj.status = '正在运行';
+							if (obj.status === 0 || obj.status === 1) obj.status = '正在运行';
 							else if (obj.status === 2) obj.status = '异常';
 							else if (obj.status === 3) obj.status = '离线';
 						}
 						//console.log(1222222, data);
 						_this.hiveList = [];
-            let list = _this.hiveList.concat(data);
+						let list = _this.hiveList.concat(data);
 
-						_this.hiveList =list
-            if(list.length>0&&this.beeBoxNo===""){
-              this.beeBoxNo = list[0].beeBoxNo
-              this.info_search(list[0].beeBoxNo);
-        			this.clickBoxId(list[0].beeBoxNo);
-            }
+						_this.hiveList = list;
+						if (list.length > 0 && this.beeBoxNo === '') {
+							this.beeBoxNo = list[0].beeBoxNo;
+							this.info_search(list[0].beeBoxNo);
+							this.clickBoxId(list[0].beeBoxNo);
+						}
 					}
 
 					//因为蜂箱数据时动态显示的，如果给定默认值，会一直刷新到第一条数据
@@ -323,12 +322,15 @@ export default {
 		},
 
 		idSelectSearch(id) {
-			//console.log(11119, id);
+			console.log(11119, id, this.beeBoxNo);
 			this.info_search(id);
+			clearInterval(timer);
 			this.clickBoxId(id);
 		},
+
 		// 点击table中的某一行开始轮询获取相关数据，放入折线图中,开始搜索后则关闭该轮询
-		clickBoxId() {
+		clickBoxId(id) {
+			console.log(9999,id);
 			let _this = this;
 			//console.log(123, _this.beeBoxNo);
 			sensorDataId = '';
@@ -351,17 +353,17 @@ export default {
 				let result;
 				if (!sensorDataId) {
 					result = post('/getBeeBoxSensorData', {
-						beeBoxNo: _this.beeBoxNo,
+						beeBoxNo: id,
 					});
 				} else {
 					result = post('/getBeeBoxSensorData', {
-						beeBoxNo: _this.beeBoxNo,
+						beeBoxNo: id,
 						sensorDataId: sensorDataId,
 					});
 				}
 				result.then(res => {
+					console.log(123445,res);
 					if (res.data.responseCode === '000000') {
-						//console.log(99999, res.data);
 						let d = res.data.data;
 						if (d) {
 							sensorDataId = d.id;
@@ -379,7 +381,6 @@ export default {
 								battery,
 								date,
 							};
-							//console.log(1111111, obj);
 							_this.$refs.fool.drawFoldLine(obj);
 						}
 					}
@@ -532,7 +533,7 @@ table tr th {
 	text-indent: 20px;
 	width: 35%;
 }
-.selected{
-  background: rgb(153, 206, 232)
+.selected {
+	background: rgb(153, 206, 232);
 }
 </style>

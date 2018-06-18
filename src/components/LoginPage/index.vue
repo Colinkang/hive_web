@@ -23,13 +23,6 @@
       <div class="line-height margin-top">
         <button type="success" class="btn" @click="checkLoin">登录</button>
       </div>
-
-      <el-row class="line-height margin-top" v-if="showAlert">
-        <el-col :span="24">
-          <el-alert :title="text" :type="status==='wrong'?'error':'success'">
-          </el-alert>
-        </el-col>
-      </el-row>
     </div>
 
   </div>
@@ -46,15 +39,12 @@ import {
 	IS_LOGIN,
 	HIVE_USER_PASSWORD,
 	HIVE_REMENBER_USERNAME,
-  HIVE_NAV_INDEX
+	HIVE_NAV_INDEX,
 } from '../../common/localStorageKey';
 import LocalStore from '../../common/localStore';
 export default {
 	name: '',
 	data: () => ({
-		showAlert: false,
-		status: 'wrong',
-		text: '',
 		account: '',
 		password: '',
 		checked: false,
@@ -66,9 +56,11 @@ export default {
 	methods: {
 		checkLoin() {
 			if (Validate({ account: this.account, password: this.password }, loginSchema) !== null) {
-				this.showAlert = true;
-				this.status = 'wrong';
-				this.text = '用户名密码不能为空';
+				this.$message({
+					message: '用户名密码不能为空',
+					type: 'warning',
+				});
+
 				return;
 			} else {
 				let result = postLogin('/login', {
@@ -76,16 +68,18 @@ export default {
 					password: this.password,
 				});
 				result.then(res => {
-					this.showAlert = true;
 					//console.log(123456, res.data);
 					if (res.data.responseCode === '000000') {
-						this.status = 'success';
-						this.text = '验证成功，欢迎登陆';
+						this.$message({
+							message: '验证成功，欢迎登陆',
+							type: 'success',
+						});
+
 						//保存token到local
 						LocalStore.setItem(HIVE_API_TOKEN, res.data.data.authToken);
 						LocalStore.setItem(HIVE_USER_NAME, this.account);
 						LocalStore.setItem(HIVE_REMENBER_USERNAME, this.checked);
-            LocalStore.setItem(HIVE_NAV_INDEX, '0');
+						LocalStore.setItem(HIVE_NAV_INDEX, '0');
 						if (this.checked) {
 							LocalStore.setItem(HIVE_USER_PASSWORD, this.password);
 						}
@@ -106,8 +100,7 @@ export default {
 							this.$emit('login-success');
 						}, 1000);
 					} else {
-						this.status = 'wrong';
-						this.text = '用户或者密码错误';
+						this.$message.error('用户或者密码错误');
 					}
 				});
 			}
@@ -127,7 +120,7 @@ export default {
 	background-color: rgb(94, 95, 95);
 	width: 100%;
 	height: 100%;
-  overflow: scroll;
+	overflow: scroll;
 	top: 0;
 }
 

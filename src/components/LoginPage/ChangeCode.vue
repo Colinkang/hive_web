@@ -95,11 +95,19 @@ export default {
 				messageType: 2298872,
 			});
 			result.then(res => {
-				console.log(1234,res);
+				console.log(1234, res);
 				if (res.data.responseCode === '000000') {
 					console.log('获取验证码成功');
-				}else{
+					this.$message({
+						message: '获取验证码成功',
+						type: 'success',
+					});
+				} else if (res.data.responseCode === '000033') {
 					// this.$message('');
+					this.$message({
+						message: '输入的手机号与预留的手机号不一致',
+						type: 'warning',
+					});
 				}
 			});
 		},
@@ -113,14 +121,18 @@ export default {
 				smsCode: this.fix.code,
 			};
 			if (Validate(input, changeCodeSchema) !== null) {
-				this.status = 'wrong';
-				this.text = '输入项都不能为空';
+				this.$message({
+					message: '输入项都不能为空',
+					type: 'warning',
+				});
 				setTimeout(() => {
 					this.changeCodeShowAlert = false;
 				}, 1000);
 			} else if (this.fix.newPassword !== this.fix.newPasswordConfirm) {
-				this.status = 'wrong';
-				this.text = '两次密码不一致';
+				this.$message({
+					message: '两次密码不一致',
+					type: 'warning',
+				});
 				setTimeout(() => {
 					this.changeCodeShowAlert = false;
 				}, 1000);
@@ -128,8 +140,10 @@ export default {
 				let result = post('/updatePassword', input);
 				result.then(res => {
 					if (res.data.responseCode === '000000') {
-						this.status = 'success';
-						this.text = '修改密码成功';
+						this.$message({
+							message: '修改密码成功',
+							type: 'success',
+						});
 						setTimeout(() => {
 							this.changeCodeShowAlert = false;
 						}, 1000);
@@ -141,8 +155,7 @@ export default {
 							code: '',
 						};
 					} else {
-						this.status = 'wrong';
-						this.text = '修改密码失败';
+						this.$message.error('修改密码失败');
 						setTimeout(() => {
 							this.changeCodeShowAlert = false;
 						}, 1000);

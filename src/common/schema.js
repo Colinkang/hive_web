@@ -24,6 +24,7 @@ const basicInfoSchema = Joi.object().keys({
     organizationId: Joi.number().required(),
     status: Joi.number().required(),
     firstTimeLogin: Joi.any(),
+    code: Joi.string().required(),
 })
 
 

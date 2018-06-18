@@ -86,6 +86,7 @@ export default {
 			username: '',
 			status: '',
 			firstTimeLogin: '',
+			code: '',
 		},
 	}),
 	methods: {
@@ -104,9 +105,16 @@ export default {
 			result.then(res => {
 				console.log(1234, res);
 				if (res.data.responseCode === '000000') {
-					console.log('获取验证码成功');
-				} else {
+					this.$message({
+						message: '获取手机验证码成功',
+						type: 'success',
+					});
+				} else if (res.data.responseCode === '000033') {
 					// this.$message('');
+					this.$message({
+						message: '输入的手机号与预留的手机号不一致',
+						type: 'warning',
+					});
 				}
 			});
 		},
@@ -121,7 +129,9 @@ export default {
 				organizationId: this.beekeeper.organizationId,
 				status: this.beekeeper.status,
 				firstTimeLogin: this.beekeeper.firstTimeLogin,
+				code: this.beekeeper.code,
 			};
+			console.log(options);
 			if (Validate(options, basicInfoSchema) !== null) {
 				this.$message({
 					message: '字段都不能为空',
@@ -137,6 +147,9 @@ export default {
 						message: '修改用户信息成功',
 						type: 'success',
 					});
+				} else if (res.data.responseCode === '000034') {
+					this.$message.error('验证码错误');
+					
 				} else {
 					this.$message.error('修改用户失败');
 				}
@@ -193,7 +206,14 @@ export default {
 	margin-top: 10px;
 }
 .sent-code {
-	color: rgb(50, 66, 222);
+	font-size: 13px;
+	color: #fff;
+	padding: 2px 4px;
+	margin-left: 10px;
+	background-color: #40557b;
+	width: 120px;
+	display: inline-block;
+	text-align: center;
 }
 .sent-code:hover {
 	color: rgb(122, 122, 122);

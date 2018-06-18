@@ -38,6 +38,7 @@ export default {
 					message: '消息不能为空',
 					type: 'warning',
 				});
+				return;
 			}
 			let result = post('/sendMail', {
 				title: '意见反馈',
