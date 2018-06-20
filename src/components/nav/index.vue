@@ -73,6 +73,7 @@ export default {
 .nav {
   background-color: #3f3b3a;
   z-index: 1111;
+  height: 100%;
 }
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
@@ -110,7 +111,6 @@ export default {
 }
 
 .is-active::after {
-
   content: "";
   position: absolute;
   right: -20px;

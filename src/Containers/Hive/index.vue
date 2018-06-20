@@ -396,16 +396,16 @@ export default {
 .box {
 	position: relative;
 	width: 100%;
-	height: 100%;
-	overflow: scroll;
+	height: 920px;
+	/* overflow: scroll; */
 	display: flex;
 }
 
 .section-left {
 	position: relative;
 	width: 35%;
-	height: 100%;
-	overflow: scroll;
+	height: 850px;
+	overflow-y: scroll;
 	padding-bottom: 20px;
 	background: white;
 }

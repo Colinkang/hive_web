@@ -15,9 +15,9 @@ export default {
 <style lang="" scoped>
 .my-content{
   width: 100%;
-  height: 100%;
   padding: 5px;
-  overflow: scroll;
+   min-height: 100%;
+  /*overflow: scroll; */
   background-color:#3f3b3a
 }
 </style>

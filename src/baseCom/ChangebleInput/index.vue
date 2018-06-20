@@ -45,6 +45,7 @@ export default {
 input{
   background: transparent;
   border:none;
-  color: #daac52;
+  font-size: 14px;
+  color: #ed9e10;
 }
 </style>

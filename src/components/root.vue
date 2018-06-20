@@ -97,7 +97,7 @@ export default {
 }
 
 .el-header {
-  padding: 0;
+  padding: 0 !important;
   background: rgb(55, 55, 55)
 }
 
@@ -106,13 +106,13 @@ export default {
 }
 
 .el-aside {
-  overflow: visible;
+  overflow: hidden!important;
   min-height: 900px;
   background-color: #404040;
 }
 
 .el-menu {
-  border: 1px solid #404040;
+  border: none !important;
   background: #3f3b3a !important
 }
 
@@ -143,8 +143,8 @@ export default {
 
 .el-main {
   width: 100%;
-  height: 100%;
-  overflow: hidden;
+  min-height: 920px;
+  overflow: hidden !important;
   border: 5px solid rgb(255, 167, 39)
 }
 

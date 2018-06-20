@@ -92,7 +92,7 @@ export default {
 	/* 标准的语法 */
 	border: none;
 	text-align: center;
-	color: #f6bb13;
+	color: #ed9e10!important;
 }
 
 .list-box {
@@ -100,7 +100,7 @@ export default {
 	width: 100%;
 	height: 200px;
 	margin-top: 10px;
-	overflow: scroll;
+	/* overflow: scroll; */
 }
 
 .list-box ul {
@@ -114,8 +114,8 @@ export default {
 
 .list-box ul li {
 	width: 100%;
-	height: 40px;
-	line-height: 40px;
+	height: 30px;
+	line-height: 30px;
 	list-style: none;
 	text-indent: 20px;
 	text-align: left;

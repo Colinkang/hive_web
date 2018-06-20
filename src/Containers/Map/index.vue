@@ -94,8 +94,36 @@
           </div>
         </div>
       </div>
+			<div class="data-update-row">
+        <div class="icon-box" v-if="status===0||status===1">
+          <i class="iconfont icon-smile"></i>
+        </div>
+				<div class="icon-box" v-if="status===2||status===3">
+          <i class="iconfont icon-cry"></i>
+        </div>
+        <div class="data-update-row-text">
+          <div class="data-update-row-name">
+            状态
+          </div>
+          <div class="data-update-row-value" v-if="status===2">
+            异常
+          </div>
+					 <div class="data-update-row-value" v-if="status===0">
+            正在运行
+          </div>
+					 <div class="data-update-row-value" v-if="status===1">
+            正在运行
+          </div>
+					 <div class="data-update-row-value" v-if="status===3">
+            离线
+          </div>
+          <div class="data-update-row-value" v-else>
+            -
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="status-box">
+    <!-- <div class="status-box">
       <div class="data-update-title">
         实时数据
       </div>
@@ -114,7 +142,7 @@
       <div class="face" v-else>
         <i class="iconfont icon-cry" style="font-size:20px;"></i>暂无数据
       </div>
-    </div>
+    </div> -->
     <div class="data-id-select-box">
       <id-select @idSelectSearch="idSelectSearch"></id-select>
     </div>
@@ -305,19 +333,19 @@ export default {
 	width: calc(100% - 10px);
 	height: calc(100% - 10px);
 	display: flex;
-	justify-content: space-between;
+	/* justify-content: space-between; */
 }
 
 .map {
 	position: relative;
 	width: calc(100% - 300px);
-	height: 100%;
+	height: 920px;
 }
 
 .detail {
 	width: 250px;
 	height: 100%;
-	margin-right: 20px;
+	margin-left: 20px;
 }
 
 .data-detail {
@@ -340,7 +368,7 @@ export default {
 
 .data-update-data {
 	width: 100%;
-	height: 300px;
+	height: 350px;
 	background: #dddddc;
 	margin-top: 20px;
 }

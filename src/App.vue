@@ -21,15 +21,17 @@ export default {
 
 <style>
 html,body{
-  min-width: 1280px;
+  min-width: 1380px;
+  width: 100%;
   margin: 0;
   padding: 0;
-  height: 100%;
-  overflow: hidden;
+  /* height: 100%;
+  overflow: hidden; */
 }
 input{
   padding: 0;
   margin:0;
+  color:#ed9e10!important;
 }
 .el-main{
   margin: 0;
