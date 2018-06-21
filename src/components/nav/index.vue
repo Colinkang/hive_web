@@ -78,8 +78,9 @@ export default {
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
-  min-height: 900px;
+  min-height: 800px;
   color: white;
+  margin-top: 40px;
 }
 
 .el-submenu {
@@ -96,7 +97,7 @@ export default {
 
 .el-menu-item {
   height: 50px;
-  line-height: 50px;
+  line-height: 40px;
 }
 
 .is-active::before {

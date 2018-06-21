@@ -82,7 +82,9 @@ export default {
 }
 
 .logo {
-	height: 100%;
+	height: 80%;
+  top: 10%;
+  left: 20px;
 	position: relative;
 	margin-left: 0;
 	float: left;

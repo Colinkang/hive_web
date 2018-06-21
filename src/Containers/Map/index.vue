@@ -35,7 +35,7 @@
             温度
           </div>
           <div class="data-update-row-value">
-            {{real.temperature||'-'}}
+            {{real.temperature||'-'}}℃
           </div>
         </div>
       </div>
@@ -48,7 +48,7 @@
             湿度
           </div>
           <div class="data-update-row-value">
-            {{real.humidity||'-'}}
+            {{real.humidity||'-'}}%Rh
           </div>
         </div>
       </div>
@@ -61,7 +61,7 @@
             压强
           </div>
           <div class="data-update-row-value">
-            {{real.airPressure||'-'}}
+            {{real.airPressure||'-'}}Pa
           </div>
         </div>
       </div>
@@ -74,7 +74,7 @@
             重量
           </div>
           <div class="data-update-row-value">
-            {{real.gravity||'-'}}
+            {{real.gravity||'-'}}Kg
           </div>
         </div>
       </div>
@@ -354,7 +354,7 @@ export default {
 	height: 100px;
 	border: 1px solid #362f2e;
 	background: #362f2e;
-	margin-top: 20px;
+	margin-top: 0px;
 }
 
 .data-detail-row {
@@ -408,21 +408,26 @@ export default {
 	left: 55px;
 	height: 40px;
 	font-size: 10px;
-	width: 100px;
+	width: 180px;
 	text-align: left;
 }
 
 .data-update-row-name {
-	margin-top: 8px;
-	line-height: 13px;
+	margin-top: 10px;
+  height: 30px;
+	line-height: 30px;
 	font-size: 9px;
-	transform: scale(0.7);
-	transform-origin: 0 50%;
+  float: left;
+
 }
 
 .data-update-row-value {
-	line-height: 25px;
-	font-size: 12px;
+	font-size: 14px;
+  float: left;
+  height: 30px;
+  line-height: 30px;
+  margin-top: 10px;
+  margin-left: 50px;
 }
 
 .status-box {
