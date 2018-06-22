@@ -483,7 +483,7 @@ table tr th {
 	position: relative;
 	width: 100%;
 	color: #daac52;
-	height: 270px;
+	height: 277px;
 	border: 1px solid #746c5e;
 	margin-top: 20px;
 	display: flex;
