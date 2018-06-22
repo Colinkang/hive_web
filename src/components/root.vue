@@ -103,12 +103,13 @@ export default {
 
 .el-aside {
   width: auto !important;
+
 }
 
 .el-aside {
   overflow: hidden!important;
   min-height: 900px;
-  background-color: #404040;
+  background-color: #3f3b3a;
 }
 
 .el-menu {

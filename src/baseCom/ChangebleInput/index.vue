@@ -1,7 +1,7 @@
 <template>
   <div class="my-box">
     <div class="my-box" :id="lisenValueChange">
-      <input type="" name="" v-model="nextValue" @blur="inputChange" v-on:keyup.enter="inputChange">
+      <input id="input" type="" name="" v-model="nextValue" @blur="inputChange" v-on:keyup.enter="inputChange">
     </div>
   </div>
 </template>
@@ -42,10 +42,11 @@ export default {
   display: inline;
   width: 40px;
 }
-input{
+#input{
   background: transparent;
   border:none;
   font-size: 14px;
   color: #ed9e10;
+  width: 85px;
 }
 </style>
