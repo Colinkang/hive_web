@@ -46,7 +46,7 @@ export default {
   background: transparent;
   border:none;
   font-size: 14px;
-  color: #ed9e10;
+  color: #daac52!important;
   width: 85px;
 }
 </style>

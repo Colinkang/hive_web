@@ -97,6 +97,7 @@ export default {
 						],
 					},
 				],
+        backgroundColor:'#f2f2f2'
 			};
 			myChart.setOption(option);
 		},

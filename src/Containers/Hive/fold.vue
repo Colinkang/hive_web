@@ -74,7 +74,7 @@ export default {
 				legend: {
 					data: ['温度', '湿度','重量','压强','电量'],
           textStyle:{
-            color:'white'
+            color:'black'
           }
 				},
 				grid: {
@@ -174,6 +174,7 @@ export default {
 					},
 
 				],
+        backgroundColor:'#f2f2f2'
 			};
 
 			foldChart.setOption(option);

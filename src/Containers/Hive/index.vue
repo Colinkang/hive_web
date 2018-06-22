@@ -68,7 +68,7 @@
       <div class="overview-chart">
         <div class="overview-chart-left">
           <div class="overview-chart-left-row">
-            <div class="section-title">
+            <div class="section-title" style="font-size:17px">
               总览
             </div>
             <div class="overview-row">
@@ -403,7 +403,7 @@ export default {
 
 .section-left {
 	position: relative;
-	width: 35%;
+	width: 40%;
 	height: 850px;
 	overflow-y: scroll;
 	padding-bottom: 20px;
@@ -411,7 +411,7 @@ export default {
 }
 
 .section-right {
-	width: 64%;
+	width: 60%;
 	height: 100%;
 	padding-left: 10px;
 	padding-right: 10px;
@@ -490,7 +490,8 @@ table tr th {
 }
 
 .chart-line {
-	width: 100%;
+	width: 96%;
+  margin-left: 2%;
 	margin-top: 30px;
 	height: 330px;
 }
@@ -499,6 +500,7 @@ table tr th {
 	width: 65%;
 	height: 100%;
 	display: flex;
+  background: white;
 }
 
 .id-select {
@@ -510,6 +512,7 @@ table tr th {
 	width: 45%;
 	height: 100%;
 	font-size: 14px;
+  color:black;
 }
 
 .overview-chart-right {

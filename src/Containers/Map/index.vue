@@ -362,7 +362,7 @@ export default {
 	width: 100%;
 	text-align: left;
 	text-indent: 30px;
-	color: #ed9e10;
+	color: #daac52;
 	font-size: 14px;
 }
 
