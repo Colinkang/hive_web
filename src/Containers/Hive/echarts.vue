@@ -42,7 +42,7 @@ export default {
 							},
 						},
 						data: [
-							{ value: obj.protectionNum, name: '策略保护', selected: true },
+							{ value: obj.protectionNum, name: '策略保护', },
 							{ value: obj.noProtectionNum, name: '非策略保护' },
 						],
 					},
@@ -50,46 +50,7 @@ export default {
 						name: '总量',
 						type: 'pie',
 						radius: ['40%', '55%'],
-            center: ['50%', '53%'],
-						label: {
-							normal: {
-								// shadowBlur:3,
-								// shadowOffsetX: 2,
-								// shadowOffsetY: 2,
-								// shadowColor: '#999',
-								// padding: [0, 7],
-								rich: {
-									a: {
-										color: '#999',
-										lineHeight: 22,
-										align: 'center',
-									},
-									// abg: {
-									//     backgroundColor: '#333',
-									//     width: '100%',
-									//     align: 'right',
-									//     height: 22,
-									//     borderRadius: [4, 4, 0, 0]
-									// },
-									hr: {
-										borderColor: '#aaa',
-										width: '100%',
-										borderWidth: 0.5,
-										height: 0,
-									},
-									b: {
-										fontSize: 16,
-										lineHeight: 33,
-									},
-									per: {
-										color: '#eee',
-										backgroundColor: '#334455',
-										padding: [2, 4],
-										borderRadius: 2,
-									},
-								},
-							},
-						},
+            center: ['50%', '50%'],
 						data: [
 							{ value: obj.normalBeeBoxNum, name: '正常' },
 							{ value: obj.abnormalBeeBoxNum, name: '异常' },

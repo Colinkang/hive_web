@@ -60,7 +60,7 @@
         </el-date-picker>
       </div>
       <div class="chart-line">
-        <fold ref="fool"></fold>
+        <fold ref="fool" :beeBoxNo="beeBoxNo"></fold>
       </div>
 
     </div>
@@ -497,19 +497,19 @@ table tr th {
 }
 
 .overview-chart {
-	width: 65%;
+	width: 60%;
 	height: 100%;
 	display: flex;
   background: white;
 }
 
 .id-select {
-	width: 34%;
+	width: 40%;
 	height: 100%;
 }
 
 .overview-chart-left {
-	width: 45%;
+	width:45%;
 	height: 100%;
 	font-size: 14px;
   color:black;
@@ -522,8 +522,8 @@ table tr th {
 
 .overview-row {
 	width: 100%;
-	display: flex;
-	margin-top: 30px;
+	/* display: flex; */
+	margin-top: 15px;
 }
 
 .overview-row-left {
@@ -535,6 +535,7 @@ table tr th {
 .overview-row-right {
 	text-align: left;
 	text-indent: 20px;
+  margin-top: 15px;
 	width: 35%;
 }
 .selected {
