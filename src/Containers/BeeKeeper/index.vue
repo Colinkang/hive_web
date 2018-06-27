@@ -23,12 +23,22 @@
             <el-input size="mini"  v-model="beekeeper.address"  placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
+
         <el-row class="form-row">
           <el-col :span="3" >
             邮箱
           </el-col>
           <el-col :span="5">
-            <el-input size="mini"  v-model="beekeeper.email"  placeholder="请输入内容"></el-input>
+              <el-input size="mini"  v-model="beekeeper.email"  placeholder="请输入内容"></el-input>
+          </el-col>
+          <el-col :span="4">
+            <span class="sent-code" @click="sendCode">发送验证码</span>
+          </el-col>
+          <el-col :span="3" >
+            验证码
+          </el-col>
+          <el-col :span="3">
+            <el-input size="mini" v-model="beekeeper.code"  placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
         <el-row class="form-row">
@@ -36,16 +46,7 @@
             联系电话
           </el-col>
           <el-col :span="5">
-              <el-input size="mini"  v-model="beekeeper.mobile"  placeholder="请输入内容"></el-input>
-          </el-col>
-          <el-col :span="4">
-            <span class="sent-code" @click="sendCode">发送验证码</span>
-          </el-col>
-          <el-col :span="3" >
-            验证码
-          </el-col> 
-          <el-col :span="3">
-            <el-input size="mini" v-model="beekeeper.code"  placeholder="请输入内容"></el-input>
+            <el-input size="mini"  v-model="beekeeper.mobile"  placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
         <el-row class="form-row">
@@ -149,7 +150,7 @@ export default {
 					});
 				} else if (res.data.responseCode === '000034') {
 					this.$message.error('验证码错误');
-					
+
 				} else {
 					this.$message.error('修改用户失败');
 				}
@@ -190,6 +191,7 @@ export default {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+  margin-top: 100px
 }
 .detail-box {
 	width: 80%;

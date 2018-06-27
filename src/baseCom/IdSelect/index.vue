@@ -63,6 +63,7 @@ export default {
 .input-outer-box {
 	padding-left: 2px;
 	padding-right: 2px;
+  background:-webkit-linear-gradient(top, #2d2a26, #3e3836);
 	background: linear-gradient(top, #2d2a26, #3e3836);
 	border-radius: 15px;
 	height: 34px;
@@ -88,7 +89,8 @@ export default {
 	margin-right: 2px;
 	height: 26px;
 	margin-top: 4px;
-	background: linear-gradient(top, #3c3834, #504947);
+	background: -webkit-linear-gradient(top, #3c3834, #504947);
+  background: linear-gradient(top, #3c3834, #504947);
 	/* 标准的语法 */
 	border: none;
 	text-align: center;

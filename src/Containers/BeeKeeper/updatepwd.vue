@@ -9,6 +9,15 @@
       <div class="">
         <el-row class="form-row">
           <el-col :span="3">
+            旧登录密码
+          </el-col>
+          <el-col :span="5">
+            <el-input size="mini" type="password" v-model.trim="fix.newPasswordConfirm"  placeholder="请输入内容"></el-input>
+          </el-col>
+
+        </el-row>
+        <el-row class="form-row">
+          <el-col :span="3">
             新登录密码
           </el-col>
           <el-col :span="5">
@@ -27,7 +36,7 @@
         </el-row>
         <el-row class="form-row">
           <el-col :span="3" >
-            手机号
+            联系手机号
           </el-col>
           <el-col :span="5">
             <el-input size="mini" v-model.trim="fix.mobile"  placeholder="请输入内容"></el-input>
@@ -166,6 +175,7 @@ export default {
 	align-items: center;
 	background: #3f3b3a;
 	z-index: 1111;
+  margin-top: 100px;
 }
 .detail-box {
 	width: 80%;

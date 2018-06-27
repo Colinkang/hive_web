@@ -65,6 +65,7 @@ export default {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+  margin-top: 100px;
 }
 .detail-box {
 	width: 80%;
@@ -82,7 +83,8 @@ export default {
 }
 .text{
   margin-top: 50px;
-  width: 70%;
+  width: 90%;
+  padding: 20px;
   height: 150px;
   border-radius: 10px;
 }
