@@ -86,11 +86,8 @@
           <div class="data-update-row-name">
             电量
           </div>
-          <div class="data-update-row-value" v-if="!real.battery=== null">
-            {{real.battery}}%
-          </div>
-          <div class="data-update-row-value" v-else>
-            -
+          <div class="data-update-row-value">
+            {{real.battery||'-'}}%
           </div>
         </div>
       </div>
@@ -175,6 +172,7 @@ export default {
 		};
 	},
 	mounted() {
+		this.getLngLat();
 		// this.firstGetData();
 		this.getRealData();
 		console.log(12390, this.centerlng, this.centerlat, this.lng, this.lat);
@@ -235,10 +233,6 @@ export default {
 		firstGetData() {
 			// console.log(222);
 			let _this = this;
-			// if (!_this.beeBoxNo) {
-			// 	console.log(1111);
-			// 	return;
-			// }
 			let result;
 			console.log(1, sensorDataId, _this.beeBoxNo);
 			if (!sensorDataId) {
@@ -268,6 +262,18 @@ export default {
 				console.log(99999, _this.real);
 			});
 		},
+    // 获取中心点的经纬度
+		getLngLat(){
+      let result = get('/getBeeBoxCenterPosition',null);
+			result.then(res=>{
+				console.log(222,res);
+				if(res.data.responseCode === '000000'){
+					this.lng = res.data.data.lng;
+					this.lat = res.data.data.lat;
+				}
+			})
+		},
+
 		//获取蜂箱的实时数据
 		getRealData() {
 			let _this = this;
