@@ -49,7 +49,7 @@ export default {
 					{
 						name: '总量',
 						type: 'pie',
-						radius: ['40%', '55%'],
+						radius: ['35%', '50%'],
             center: ['50%', '50%'],
 						data: [
 							{ value: obj.normalBeeBoxNum, name: '正常' },

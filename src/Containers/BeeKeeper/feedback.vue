@@ -8,7 +8,7 @@
         <el-row style="font-size:14px;top:90px"></el-row> -->
       </div>
       <div class="">
-        <div class="form-row">
+        <div class="form-row" style="height:400px;">
           <!-- <el-row style="font-size:25px;top:70px">意见反馈</el-row> -->
           <textarea class="text" style="font-size:15px;" v-model="message" placeholder="感谢您提出的宝贵意见，我们收到后会第一时间予以回复并尽快解决问题"></textarea>
           <el-row class="form-row">
