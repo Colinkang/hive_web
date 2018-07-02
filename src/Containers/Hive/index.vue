@@ -6,7 +6,7 @@
         <th>蜂箱ID</th>
         <th>温度</th>
         <th>湿度</th>
-        <th>重量</th>
+        <th>重力</th>
         <th>压强</th>
         <th>状态</th>
         <th>电量</th>

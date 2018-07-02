@@ -1,7 +1,7 @@
 <template>
 <div class="map-box">
   <div class="map">
-    <baidu-map style="width:100%;height:100%" :center="{lng, lat}" :zoom="zoom" @ready="getPoints">
+    <baidu-map style="width:100%;height:100%" :center="{lng, lat}" :zoom="zoom" @ready="getPoints" centerAndZoom="">
       <!-- <bm-city-list anchor="BMAP_ANCHOR_TOP_LEFT"></bm-city-list> -->
       <bm-point-collection :points="points" shape="BMAP_POINT_SHAPE_CIRCLE" color="red" size="BMAP_POINT_SIZE_NORMAL" @click="clickHandler"></bm-point-collection>
       <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
@@ -71,10 +71,10 @@
         </div>
         <div class="data-update-row-text">
           <div class="data-update-row-name">
-            重量
+            重力
           </div>
           <div class="data-update-row-value">
-            {{real.gravity||'-'}}Kg
+            {{real.gravity||'-'}}N/Kg
           </div>
         </div>
       </div>
@@ -226,6 +226,8 @@ export default {
 				console.log(11234, res.data);
 				if (res.data.responseCode === '000000') {
 					this.idSelectSearch(res.data.data.beeBoxNo);
+				}else if(res.data.responseCode === '000035'){
+					this.idSelectSearch(null);
 				}
 			});
 		},
@@ -262,16 +264,16 @@ export default {
 				console.log(99999, _this.real);
 			});
 		},
-    // 获取中心点的经纬度
-		getLngLat(){
-      let result = get('/getBeeBoxCenterPosition',null);
-			result.then(res=>{
-				console.log(222,res);
-				if(res.data.responseCode === '000000'){
+		// 获取中心点的经纬度
+		getLngLat() {
+			let result = get('/getBeeBoxCenterPosition', null);
+			result.then(res => {
+				console.log(222, res);
+				if (res.data.responseCode === '000000') {
 					this.lng = res.data.data.lng;
 					this.lat = res.data.data.lat;
 				}
-			})
+			});
 		},
 
 		//获取蜂箱的实时数据
@@ -305,6 +307,20 @@ export default {
 					if (data) {
 						_this.ok = true;
 						_this.beeBoxNo = data.beeBoxNo ? data.beeBoxNo : '';
+						console.log(_this.lat, _this.lng, 888888);
+						if (!data.lat || !data.lng) {
+							console.log(789);
+
+							_this.ok = false;
+							_this.centerlat = '';
+							_this.centerlng = '';
+
+							_this.$message({
+								message: '没有位置信息',
+								type: 'warning',
+							});
+							return;
+						}
 						_this.lat = data.lat;
 						_this.lng = data.lng;
 						_this.centerlat = data.lat;
@@ -328,6 +344,7 @@ export default {
 		idSelectSearch(beeBoxNo) {
 			this.info_search(beeBoxNo);
 			// this.firstGetData();
+			this.beeBoxNo = beeBoxNo;
 			this.getRealData();
 		},
 	},
@@ -420,20 +437,19 @@ export default {
 
 .data-update-row-name {
 	margin-top: 10px;
-  height: 30px;
+	height: 30px;
 	line-height: 30px;
 	font-size: 9px;
-  float: left;
-
+	float: left;
 }
 
 .data-update-row-value {
 	font-size: 14px;
-  float: left;
-  height: 30px;
-  line-height: 30px;
-  margin-top: 10px;
-  margin-left: 50px;
+	float: left;
+	height: 30px;
+	line-height: 30px;
+	margin-top: 10px;
+	margin-left: 50px;
 }
 
 .status-box {

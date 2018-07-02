@@ -12,7 +12,7 @@
             旧登录密码
           </el-col>
           <el-col :span="5">
-            <el-input size="mini" type="password" v-model.trim="fix.newPasswordConfirm"  placeholder="请输入内容"></el-input>
+            <el-input size="mini" type="password" v-model.trim="fix.oldPassword"  placeholder="请输入内容"></el-input>
           </el-col>
 
         </el-row>
@@ -67,16 +67,16 @@
 </template>
 <script>
 import { get, post } from '../../common/post.js';
-import { Validate, changeCodeSchema } from '../../common/schema.js';
+import { Validate, updatePasswordSchema } from '../../common/schema.js';
 import { HIVE_USER_NAME } from '../../common/localStorageKey.js';
 import localStore from '../../common/localStore.js';
 export default {
 	name: '',
 	data: () => ({
-		changeCodeShowAlert: false,
 		fix: {
-			username: '',
-			newPassword: '',
+			userName: '',
+			oldPassword: '',
+			password: '',
 			newPasswordConfirm: '',
 			mobile: '',
 			code: '',
@@ -115,26 +115,20 @@ export default {
 			});
 		},
 		save() {
-			this.changeCodeShowAlert = true;
 			let input = {
 				userName: localStore.getItem(HIVE_USER_NAME),
+				oldPassword: this.fix.oldPassword,
 				password: this.fix.newPassword,
 				mobile: this.fix.mobile,
 				smsCode: this.fix.code,
 			};
-			console.log(input, localStore.getItem(HIVE_USER_NAME), Validate(input, changeCodeSchema));
-			if (Validate(input, changeCodeSchema) !== null) {
+			console.log(input, localStore.getItem(HIVE_USER_NAME), Validate(input, updatePasswordSchema));
+			if (Validate(input, updatePasswordSchema) !== null) {
 				this.status = 'wrong';
 				this.text = '输入项都不能为空';
-				setTimeout(() => {
-					this.changeCodeShowAlert = false;
-				}, 1000);
 			} else if (this.fix.newPassword !== this.fix.newPasswordConfirm) {
 				this.status = 'wrong';
 				this.text = '两次密码不一致';
-				setTimeout(() => {
-					this.changeCodeShowAlert = false;
-				}, 1000);
 			} else {
 				let result = post('/updatePassword', input);
 				result.then(res => {
@@ -145,16 +139,27 @@ export default {
 							type: 'success',
 						});
 						this.fix = {
-							username: '',
+							userName: '',
 							newPassword: '',
 							newPasswordConfirm: '',
 							mobile: '',
 							code: '',
 						};
 						this.$router.back();
+					} else if (res.data.responseCode === '000038') {
+						this.$message({
+							message: '旧登录密码不正确',
+							type: 'warning',
+						});
+					} else if (res.data.responseCode === '000033') {
+						this.$message({
+							message: '与注册时的手机号不一致',
+							type: 'warning',
+						});
 					} else if (res.data.responseCode === '000034') {
 						this.$message.error('验证码错误');
 					} else {
+						console.log(1111, res);
 						this.$message.error('修改密码失败');
 					}
 				});
@@ -175,7 +180,7 @@ export default {
 	align-items: center;
 	background: #3f3b3a;
 	z-index: 1111;
-  margin-top: 100px;
+	margin-top: 100px;
 }
 .detail-box {
 	width: 80%;

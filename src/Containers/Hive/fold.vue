@@ -79,7 +79,7 @@ props:{
           top:50
         },
         legend: {
-          data: ['温度', '湿度', '重量', '压强', '电量'],
+          data: ['温度', '湿度', '重力', '压强', '电量'],
           textStyle: {
             color: 'black'
           },
@@ -158,7 +158,7 @@ props:{
             data: obj.humidity,
           },
           {
-            name: '重量',
+            name: '重力',
             type: 'line',
             yAxisIndex: 2,
             smooth: true,

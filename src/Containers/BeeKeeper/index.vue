@@ -31,15 +31,6 @@
           <el-col :span="5">
               <el-input size="mini"  v-model="beekeeper.email"  placeholder="请输入内容"></el-input>
           </el-col>
-          <el-col :span="4">
-            <span class="sent-code" @click="sendCode">发送验证码</span>
-          </el-col>
-          <el-col :span="3" >
-            验证码
-          </el-col>
-          <el-col :span="3">
-            <el-input size="mini" v-model="beekeeper.code"  placeholder="请输入内容"></el-input>
-          </el-col>
         </el-row>
         <el-row class="form-row">
           <el-col :span="3" >
@@ -47,6 +38,15 @@
           </el-col>
           <el-col :span="5">
             <el-input size="mini"  v-model="beekeeper.mobile"  placeholder="请输入内容"></el-input>
+          </el-col>
+					 <el-col :span="4">
+            <span class="sent-code" @click="sendCode">发送验证码</span>
+          </el-col>
+						<el-col :span="3" >
+							验证码
+						</el-col>
+          <el-col :span="3">
+            <el-input size="mini" v-model="beekeeper.code"  placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
         <el-row class="form-row">

@@ -25,12 +25,20 @@ const basicInfoSchema = Joi.object().keys({
     status: Joi.number().required(),
     firstTimeLogin: Joi.any(),
     code: Joi.string().required(),
-})
+});
+const updatePasswordSchema = Joi.object().keys({
+    userName: Joi.string().required(),
+    oldPassword: Joi.string().required(),
+    password: Joi.string().required(),
+    mobile: Joi.string().required(),
+    smsCode: Joi.string().required()
+});
 
 
 module.exports = {
     Validate,
     loginSchema,
     changeCodeSchema,
-    basicInfoSchema
+    basicInfoSchema,
+    updatePasswordSchema
 };
