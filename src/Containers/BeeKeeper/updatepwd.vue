@@ -3,8 +3,8 @@
     <div class="detail-box">
       <div class="section-top">
         <!-- <el-row style="font-size:25px;top:70px">修改密码</el-row> -->
-        <el-row style="font-size:14px;top:80px;text-align:left;margin-left:40px">蜂农：张三三</el-row>
-        <el-row style="font-size:14px;top:90px;text-align:left;margin-left:40px">蜂农ID：001</el-row>
+        <el-row style="font-size:14px;top:80px;text-align:left;margin-left:40px">蜂农：{{username}}</el-row>
+        <el-row style="font-size:14px;top:90px;text-align:left;margin-left:40px">蜂农ID：{{userId}}</el-row>
       </div>
       <div class="">
         <el-row style="font-size:35px;">修改密码</el-row>
@@ -84,8 +84,24 @@ export default {
 		},
 		status: '',
 		text: '',
+		username: '',
+		userId: '',
 	}),
+	mounted() {
+		this.username = localStore.getItem(HIVE_USER_NAME);
+		this.getBeekerInfo();
+	},
 	methods: {
+		getBeekerInfo() {
+			let result = get('/getUserDisplayInfo');
+			result.then(res => {
+				console.log(123, res);
+				if (res.data.responseCode === '000000') {
+					let data = res.data.data;
+					this.userId = data.id;
+				}
+			});
+		},
 		sendCode() {
 			if (!this.fix.mobile) {
 				this.$message({
