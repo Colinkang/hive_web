@@ -2,17 +2,18 @@
   <div class="container">
     <div class="detail-box">
       <div class="section-top">
-        <el-row style="font-size:25px;top:70px">修改密码</el-row>
-        <el-row style="font-size:14px;top:80px"></el-row>
-        <el-row style="font-size:14px;top:90px"></el-row>
+        <!-- <el-row style="font-size:25px;top:70px">修改密码</el-row> -->
+        <el-row style="font-size:14px;top:80px;text-align:left;margin-left:40px">蜂农：张三三</el-row>
+        <el-row style="font-size:14px;top:90px;text-align:left;margin-left:40px">蜂农ID：001</el-row>
       </div>
       <div class="">
-        <el-row class="form-row">
+        <el-row style="font-size:35px;">修改密码</el-row>
+        <el-row class="form-row" style="margin-top:50px">
           <el-col :span="3">
             旧登录密码
           </el-col>
-          <el-col :span="5">
-            <el-input size="mini" type="password" v-model.trim="fix.oldPassword"  placeholder="请输入内容"></el-input>
+          <el-col :span="15">
+            <el-input size="mini" type="password" v-model.trim="fix.oldPassword"  placeholder=""></el-input>
           </el-col>
 
         </el-row>
@@ -20,26 +21,26 @@
           <el-col :span="3">
             新登录密码
           </el-col>
-          <el-col :span="5">
-            <el-input size="mini" type="password" v-model.trim="fix.newPassword"  placeholder="请输入内容"></el-input>
+          <el-col :span="15">
+            <el-input size="mini" type="password" v-model.trim="fix.newPassword"  placeholder=""></el-input>
           </el-col>
 
         </el-row>
         <el-row class="form-row">
           <el-col :span="3">
-            确认新密码
+            重输入新登录密码
           </el-col>
-          <el-col :span="5">
-            <el-input size="mini" type="password" v-model.trim="fix.newPasswordConfirm"  placeholder="请输入内容"></el-input>
+          <el-col :span="15">
+            <el-input size="mini" type="password" v-model.trim="fix.newPasswordConfirm"  placeholder=""></el-input>
           </el-col>
 
         </el-row>
         <el-row class="form-row">
           <el-col :span="3" >
-            联系手机号
+            手机号码
           </el-col>
           <el-col :span="5">
-            <el-input size="mini" v-model.trim="fix.mobile"  placeholder="请输入内容"></el-input>
+            <el-input size="mini" v-model.trim="fix.mobile"  placeholder=""></el-input>
           </el-col>
           <el-col :span="4">
             <span class="sent-code" @click="sendCode">发送短信验证码</span>
@@ -48,13 +49,13 @@
             验证码
           </el-col>
           <el-col :span="3">
-            <el-input size="mini" v-model.trim="fix.code"  placeholder="请输入内容"></el-input>
+            <el-input size="mini" v-model.trim="fix.code"  placeholder=""></el-input>
           </el-col>
 
         </el-row>
         <el-row class="form-row">
           <el-col :span="4">
-            <el-button type="primary" @click="save">确认修改</el-button>
+            <el-button type="warning" @click="save">确认修改</el-button>
           </el-col>
           <!-- <el-col :span="4">
             <el-button type="default" @click="cancel">取消</el-button>
@@ -178,18 +179,18 @@ export default {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background: #3f3b3a;
+	/* background: #3f3b3a; */
 	z-index: 1111;
 	margin-top: 100px;
 }
 .detail-box {
 	width: 80%;
 	height: 700px;
-	border: 1px solid rgb(255, 167, 39);
+	border: 2px solid rgb(255, 167, 39);
 }
 .section-top {
 	height: 250px;
-	background: rgb(255, 167, 39);
+	/* background: rgb(255, 167, 39); */
 }
 .form-row {
 	height: 30px;

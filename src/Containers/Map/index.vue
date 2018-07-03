@@ -356,6 +356,7 @@ export default {
 	width: calc(100% - 10px);
 	height: calc(100% - 10px);
 	display: flex;
+    background: #3f3b3a
 	/* justify-content: space-between; */
 }
 
@@ -369,6 +370,7 @@ export default {
 	width: 250px;
 	height: 100%;
 	margin-left: 20px;
+
 }
 
 .data-detail {

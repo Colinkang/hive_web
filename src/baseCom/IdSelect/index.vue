@@ -3,14 +3,15 @@
   <div class="input-box">
     <span>搜索</span>
     <div class="input-outer-box">
-      <input type="text" name="" value="" @input="getList">
+      <input type="text" name="" value="" @input="getList" >
     </div>
 
   </div>
   <div class="list-box">
     <ul>
       <li v-for="(item,index) in list" :key="index" :class="selectId ===item?'slected':''" @click="selectThis(item)">
-        {{item}}
+        蜂箱ID:{{item}}
+        <!-- <img :src="selectId ===item?require('./not-selected.png'):require('./not-selected.png')" alt="" class="select-img"> -->
       </li>
 
     </ul>
@@ -58,13 +59,14 @@ export default {
 	position: relative;
 	width: 100%;
 	height: 100%;
+  border:1px solid #3f3b3a;
 }
 
 .input-outer-box {
 	padding-left: 2px;
 	padding-right: 2px;
+  background: linear-gradient(top, #2d2a26, #3e3836);
   background:-webkit-linear-gradient(top, #2d2a26, #3e3836);
-	background: linear-gradient(top, #2d2a26, #3e3836);
 	border-radius: 15px;
 	height: 34px;
 	display: inline-block;
@@ -89,8 +91,9 @@ export default {
 	margin-right: 2px;
 	height: 26px;
 	margin-top: 4px;
-	background: -webkit-linear-gradient(top, #3c3834, #504947);
   background: linear-gradient(top, #3c3834, #504947);
+	background: -webkit-linear-gradient(top, #3c3834, #504947);
+
 	/* 标准的语法 */
 	border: none;
 	text-align: center;
@@ -121,18 +124,26 @@ export default {
 	list-style: none;
 	text-indent: 20px;
 	text-align: left;
-	background: linear-gradient(top, #524b49, #3d3a36);
+	background: -webkit-linear-gradient(top, #524b49, #3d3a36);
 	border-top: 2px solid #2d2a26;
 	left: 0;
 	color: #f5f2ee;
+  font-size: 14px;
 }
 .list-box ul li:hover {
-	background: linear-gradient(top, #ed9e10, #f7bf14);
+	background: -webkit-linear-gradient(top, #ed9e10, #f7bf14);
 	color: black;
 	cursor: pointer;
 }
 .slected {
-	background: linear-gradient(top, #ed9e10, #f7bf14) !important;
+	background: -webkit-linear-gradient(top, #ed9e10, #f7bf14) !important;
 	color: black;
+}
+.select-img{
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  right: 10px;
+  top: 7px;
 }
 </style>

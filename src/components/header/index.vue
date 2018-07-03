@@ -1,6 +1,6 @@
 <template>
 <div class="header">
-  <img :src="require('./image/logo-content.png')" class="logo">
+  <img :src="require('./image/logo-img.png')" class="logo">
   <!-- <div class="login">
     <el-menu  class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="rgb(0,0,0)" text-color="#fff" active-text-color="rgb(0,0,0)" :router= "true">
       <el-submenu index="1">
@@ -16,7 +16,6 @@
   </div> -->
   <div class="user-control">
     <span>
-
        <router-link to="/beekeeper/info"><i class="iconfont icon-user"></i>{{account}}</router-link>
     </span>
     <span>
