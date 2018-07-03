@@ -28,7 +28,7 @@
         </el-row>
         <el-row class="form-row">
           <el-col :span="3">
-            重输入新登录密码
+            确认新密码
           </el-col>
           <el-col :span="15">
             <el-input size="mini" type="password" v-model.trim="fix.newPasswordConfirm"  placeholder=""></el-input>
